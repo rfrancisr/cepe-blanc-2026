@@ -203,8 +203,6 @@
   <div class="tabs-inner">
     <button class="tab-btn active" onclick="showTab('vue-ensemble',this)">📋 Vue d'ensemble</button>
     <button class="tab-btn" onclick="showTab('comparaison',this)">📊 Comparaison matières</button>
-    <button class="tab-btn" onclick="showTab('points',this)">⚡ Points forts & faibles</button>
-    <button class="tab-btn" onclick="showTab('classement',this)">🏆 Classements</button>
     <button class="tab-btn" onclick="showTab('eleve',this)">🎓 Analyse par élève</button>
     <button class="tab-btn" onclick="showTab('recommandations',this)">🎯 Recommandations</button>
   </div>
@@ -239,8 +237,51 @@
   </div>
 
   <div class="chart-header">
+    <h3>🏫 Position d'Henitsoa parmi les établissements et meilleurs élèves</h3>
+    <p>Henitsoa se classe 14ème sur 27 établissements. Le graphique montre l'écart avec les leaders ; le tableau recense les 10 meilleurs élèves de l'école.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🏫 Classement des établissements (top 15)</div>
+      <div style="height:420px;position:relative;"><canvas id="cSchools"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌟 Top 10 élèves Henitsoa</div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Nom</th><th>Rang gén.</th><th>Moy.</th></tr></thead>
+        <tbody id="top10-table"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-header">
+    <h3>📈 Où se situent les élèves d'Henitsoa dans le classement général ?</h3>
+    <p>Distribution des 56 élèves par tranches de rangs sur les 1 332 participants. Cette vue révèle la polarisation de l'école : quelques excellents éléments en tête, une majorité au milieu du classement, et un groupe en difficulté à accompagner en priorité.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Distribution des rangs — élèves Henitsoa (sur 1 332)</div>
+    <div class="ch-med"><canvas id="cDist"></canvas></div>
+    <div style="margin-top:1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;font-size:.81rem;">
+      <div style="text-align:center;padding:.6rem;background:#dcfce7;border-radius:8px;"><div style="font-weight:700;color:#15803d;font-size:1.05rem">2 élèves</div><div style="color:#166534">Top 100 (3,6%)</div></div>
+      <div style="text-align:center;padding:.6rem;background:#fef9c3;border-radius:8px;"><div style="font-weight:700;color:#a16207;font-size:1.05rem">25 élèves</div><div style="color:#92400e">Rang 101–500 (44,6%)</div></div>
+      <div style="text-align:center;padding:.6rem;background:#fee2e2;border-radius:8px;"><div style="font-weight:700;color:#b91c1c;font-size:1.05rem">12 élèves</div><div style="color:#991b1b">Rang 1001+ (21,4%)</div></div>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 2 : COMPARAISON MATIÈRES
+═══════════════════════════════════════════════════ -->
+<div id="comparaison" class="section"><div class="container">
+  <div class="section-title">Analyse détaillée par matière</div>
+  <div class="section-subtitle">Scores normalisés /20 — comparaison Henitsoa vs Top 20 vs Trinitaire</div>
+
+  <div class="chart-header">
     <h3>🔎 Bilan général — niveaux d'urgence par matière</h3>
-    <p>Les matières sont regroupées selon l'ampleur de leur retard. Cette lecture rapide permet de prioriser l'action pédagogique : commencez par les cases rouges, puis orange, avant de consolider les acquis.</p>
+    <p>Les matières sont regroupées par niveau de retard. Commencez par les cases rouges (priorité absolue), puis orange, avant de consolider les acquis (vert).</p>
   </div>
 
   <div class="grid-2">
@@ -284,7 +325,7 @@
 
   <div class="chart-header">
     <h3>🎯 Radar des compétences — profil global par matière</h3>
-    <p>Le radar compare Henitsoa, le Top 20 et Trinitaire sur toutes les matières simultanément. Les zones creuses de la surface rouge indiquent les matières à renforcer ; les zones qui se rapprochent du bleu montrent les points d'appui à valoriser.</p>
+    <p>Le radar compare Henitsoa, le Top 20 et Trinitaire sur toutes les matières. Les zones creuses de la surface rouge indiquent les matières à renforcer ; les zones proches du bleu montrent les points d'appui.</p>
   </div>
 
   <div class="card">
@@ -298,36 +339,8 @@
   </div>
 
   <div class="chart-header">
-    <h3>📈 Où se situent les élèves d'Henitsoa dans le classement général ?</h3>
-    <p>Distribution des 56 élèves par tranches de rangs sur les 1 332 participants. Cette vue révèle la polarisation de l'école : quelques excellents éléments en tête, une majorité au milieu du classement, et un groupe en difficulté à accompagner en priorité.</p>
-  </div>
-
-  <div class="card">
-    <div class="card-title">📊 Distribution des rangs — élèves Henitsoa (sur 1 332)</div>
-    <div class="ch-med"><canvas id="cDist"></canvas></div>
-    <div style="margin-top:1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;font-size:.81rem;">
-      <div style="text-align:center;padding:.6rem;background:#dcfce7;border-radius:8px;"><div style="font-weight:700;color:#15803d;font-size:1.05rem">2 élèves</div><div style="color:#166534">Top 100 (3,6%)</div></div>
-      <div style="text-align:center;padding:.6rem;background:#fef9c3;border-radius:8px;"><div style="font-weight:700;color:#a16207;font-size:1.05rem">25 élèves</div><div style="color:#92400e">Rang 101–500 (44,6%)</div></div>
-      <div style="text-align:center;padding:.6rem;background:#fee2e2;border-radius:8px;"><div style="font-weight:700;color:#b91c1c;font-size:1.05rem">12 élèves</div><div style="color:#991b1b">Rang 1001+ (21,4%)</div></div>
-    </div>
-  </div>
-
-</div></div>
-
-<!-- ═══════════════════════════════════════════════════
-     TAB 2 : COMPARAISON MATIÈRES
-═══════════════════════════════════════════════════ -->
-<div id="comparaison" class="section"><div class="container">
-  <div class="section-title">Analyse détaillée par matière</div>
-  <div class="section-subtitle">Scores normalisés /20 — comparaison Henitsoa vs Top 20 vs Trinitaire</div>
-
-  <div class="tab-intro">
-    <p><strong>Lecture : du général au particulier.</strong> Commencez par les barres visuelles <strong>(étape 1)</strong> pour identifier rapidement les matières en retard, puis explorez le graphique comparatif <strong>(étape 2)</strong> pour une vue d'ensemble, et terminez par le tableau chiffré <strong>(étape 3)</strong> pour les données précises.</p>
-  </div>
-
-  <div class="chart-header">
-    <h3><span class="step-num">1</span> Où sont les plus grands écarts ? — vue synthétique</h3>
-    <p>Chaque barre rouge (Henitsoa) est superposée au fond bleu (Top 20). Plus le rouge est court par rapport au bleu, plus le retard est important. Le badge en % quantifie l'écart relatif entre Henitsoa et les 20 meilleurs élèves du concours.</p>
+    <h3>📏 Écart par matière — du plus grand retard au plus petit</h3>
+    <p>Les matières sont classées du retard le plus critique au plus faible. La barre rouge (Henitsoa) est comparée au fond bleu (Top 20) — plus le rouge est court, plus le retard est important.</p>
   </div>
 
   <div class="card">
@@ -340,18 +353,8 @@
   </div>
 
   <div class="chart-header">
-    <h3><span class="step-num">2</span> Comparaison complète — Henitsoa, Top 20 et Trinitaire</h3>
-    <p>Vue côte à côte des trois références pour chaque matière. Ce graphique permet de situer Henitsoa dans le spectre complet : entre l'école leader (Trinitaire) et les 20 meilleurs élèves individuels du concours. Observez les matières où Trinitaire dépasse aussi le Top 20 individuel.</p>
-  </div>
-
-  <div class="card">
-    <div class="card-title">📊 Comparaison détaillée par matière</div>
-    <div style="height:360px;position:relative;"><canvas id="cSubjDetail"></canvas></div>
-  </div>
-
-  <div class="chart-header">
-    <h3><span class="step-num">3</span> Tableau chiffré — les données précises par matière</h3>
-    <p>Scores bruts, normalisés /20, écarts absolus et relatifs. Le niveau de diagnostic traduit l'urgence d'action : de ✅ Acceptable (écart &lt; 22%) à 🔴 Critique (écart &gt; 50%). Utilisez ce tableau comme référence pour le suivi des progrès.</p>
+    <h3>📋 Tableau chiffré — les données précises par matière</h3>
+    <p>Scores bruts, normalisés /20, écarts absolus et relatifs. Le niveau de diagnostic traduit l'urgence d'action : de ✅ Acceptable (écart &lt; 22%) à 🔴 Critique (écart &gt; 50%).</p>
   </div>
 
   <div class="card">
@@ -366,84 +369,7 @@
 </div></div>
 
 <!-- ═══════════════════════════════════════════════════
-     TAB 3 : POINTS FORTS & FAIBLES
-═══════════════════════════════════════════════════ -->
-<div id="points" class="section"><div class="container">
-  <div class="section-title">Forces et faiblesses</div>
-  <div class="section-subtitle">Diagnostic pédagogique — comparaison vs les 20 meilleurs élèves</div>
-
-  <div class="tab-intro">
-    <p><strong>Deux visualisations complémentaires.</strong> Le profil de compétences (courbe) montre la forme générale du niveau d'Henitsoa sur toutes les matières à la fois. La carte des lacunes classe ensuite les matières par ordre d'urgence d'intervention, du retard le plus critique au plus léger.</p>
-  </div>
-
-  <div class="chart-header">
-    <h3>📉 Profil global des compétences — comparaison sur toutes les matières</h3>
-    <p>La courbe rouge (Henitsoa) est tracée contre les références Top 20 et Trinitaire. Les "vallées" de la courbe rouge signalent les matières à renforcer ; les zones où elle se rapproche des références indiquent les points d'appui à valoriser. La forme de la courbe donne une signature pédagogique de l'école.</p>
-  </div>
-
-  <div class="card">
-    <div class="card-title">📉 Profil de compétences Henitsoa vs références</div>
-    <div style="height:340px;position:relative;"><canvas id="cStrengths"></canvas></div>
-  </div>
-
-  <div class="chart-header">
-    <h3>🎯 Classement des lacunes — de la plus critique à la plus légère</h3>
-    <p>Les matières sont triées par ordre décroissant de retard relatif (%). La couleur indique la criticité : rouge foncé (&gt; 60%) → action immédiate, rouge (&gt; 45%), orange (&gt; 35%), ambre (&lt; 35%). Problème et Opération concentrent l'essentiel du retard à combler.</p>
-  </div>
-
-  <div class="card">
-    <div class="card-title">🎯 Carte des lacunes — Retard en % vs Top 20</div>
-    <div style="height:300px;position:relative;"><canvas id="cGap"></canvas></div>
-    <p style="font-size:.79rem;color:var(--muted);margin-top:.7rem;text-align:center;">Plus la barre est longue, plus le retard est critique. Problème et Opération nécessitent une action immédiate.</p>
-  </div>
-</div></div>
-
-<!-- ═══════════════════════════════════════════════════
-     TAB 4 : CLASSEMENTS
-═══════════════════════════════════════════════════ -->
-<div id="classement" class="section"><div class="container">
-  <div class="section-title">Classements &amp; palmarès</div>
-  <div class="section-subtitle">Position de Henitsoa dans l'ensemble du concours</div>
-
-  <div class="tab-intro">
-    <p><strong>Deux niveaux de lecture.</strong> D'abord la vision macro : où Henitsoa se place-t-il parmi les 33 établissements ? Ensuite le zoom : qui sont les meilleurs élèves de l'école et quels profils représentent la cible d'excellence à atteindre ?</p>
-  </div>
-
-  <div class="chart-header">
-    <h3>🏫 Position d'Henitsoa parmi les établissements participants</h3>
-    <p>Classement des 15 premiers établissements par moyenne générale /20. Henitsoa (en rouge) occupe le 14ème rang sur 27. Ce graphique aide à visualiser l'écart avec les leaders et à identifier des cibles réalistes de progression (ex : intégrer le top 10 en 2027).</p>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <div class="card-title">🏫 Classement des établissements (top 15)</div>
-      <div style="height:420px;position:relative;"><canvas id="cSchools"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="card-title">🌟 Top 10 élèves Henitsoa</div>
-      <div class="table-wrap">
-        <table><thead><tr><th>#</th><th>Nom</th><th>Rang gén.</th><th>Moy.</th></tr></thead>
-        <tbody id="top10-table"></tbody></table>
-      </div>
-    </div>
-  </div>
-
-  <div class="chart-header">
-    <h3>🥇 Les 20 meilleurs élèves toutes écoles confondues — la cible d'excellence</h3>
-    <p>Le palmarès national du concours. À noter : 13 des 20 premiers viennent du Collège Trinitaire Sainte Marie, révélant une forte concentration de l'excellence dans un seul établissement. Ces profils — leurs scores par matière, leur régularité — représentent la référence vers laquelle orienter les meilleurs élèves d'Henitsoa.</p>
-  </div>
-
-  <div class="card">
-    <div class="card-title">🥇 Top 20 toutes écoles</div>
-    <div class="table-wrap">
-      <table><thead><tr><th>Rang</th><th>Nom</th><th>Établissement</th><th>Moyenne</th></tr></thead>
-      <tbody id="top20-table"></tbody></table>
-    </div>
-  </div>
-</div></div>
-
-<!-- ═══════════════════════════════════════════════════
-     TAB 5 : ANALYSE PAR ÉLÈVE
+     TAB 3 : ANALYSE PAR ÉLÈVE
 ═══════════════════════════════════════════════════ -->
 <div id="eleve" class="section"><div class="container">
   <div class="section-title">Analyse individuelle</div>
@@ -778,11 +704,10 @@ new Chart(document.getElementById('cDist'), {
 /* ════════════════════════════════════════════════════
    TAB 2 — SUBJECT BARS + CHART + TABLE
 ════════════════════════════════════════════════════ */
+/* GAPS is already sorted most → least gap: Problème, Opération, Géographie, TTFM, Malagasy, SVT, Français */
 (function buildSubjectBars(){
   const c = document.getElementById('subject-bars');
-  LABELS.forEach((lbl,i)=>{
-    const hen=HEN_SCORES[i], t20=TOP20_SCORES[i];
-    const pct = Math.round((hen-t20)/t20*100);
+  GAPS.forEach(([lbl, hen, t20, pct])=>{
     const henW = (hen/20*100).toFixed(1);
     const t20W = (t20/20*100).toFixed(1);
     c.innerHTML += `
@@ -799,25 +724,13 @@ new Chart(document.getElementById('cDist'), {
   });
 })();
 
-new Chart(document.getElementById('cSubjDetail'), {
-  type:'bar',
-  data:{labels:LABELS,datasets:[
-    {label:'Henitsoa',  data:HEN_SCORES,   backgroundColor:C.henA,   borderRadius:4},
-    {label:'Top 20',    data:TOP20_SCORES, backgroundColor:C.top20A, borderRadius:4},
-    {label:'Trinitaire',data:TRI_SCORES,   backgroundColor:C.triA,   borderRadius:4}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'top'}},
-    scales:{y:{min:0,max:20,title:{display:true,text:'Score /20'},grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}}
-});
-
 (function buildSubjTable(){
   const tb = document.getElementById('subj-table');
-  const bar = [20,40,40,20,20,40,20];
-  LABELS.forEach((lbl,i)=>{
-    const hen=HEN_SCORES[i],t20=TOP20_SCORES[i],tri=TRI_SCORES[i];
+  GAPS.forEach(([lbl, hen, t20, pct])=>{
+    const idx = LABELS.indexOf(lbl);
+    const tri = TRI_SCORES[idx];
+    const bar_val = BAREME[idx];
     const gap=(hen-t20).toFixed(2);
-    const pct=Math.round((hen-t20)/t20*100);
     let lvl,lc;
     if(pct>=-22){lvl='✅ Acceptable';lc='#16a34a';}
     else if(pct>=-35){lvl='⚠️ À améliorer';lc='#a16207';}
@@ -825,7 +738,7 @@ new Chart(document.getElementById('cSubjDetail'), {
     else{lvl='🔴 Critique';lc='#b91c1c';}
     tb.innerHTML+=`<tr>
       <td><strong>${lbl}</strong></td>
-      <td style="color:var(--muted)">/${bar[i]}</td>
+      <td style="color:var(--muted)">/${bar_val}</td>
       <td style="color:${scoreColor(hen)};font-weight:700">${hen}</td>
       <td style="color:${C.top20};font-weight:700">${t20}</td>
       <td style="color:${C.tri};font-weight:700">${tri}</td>
@@ -837,35 +750,7 @@ new Chart(document.getElementById('cSubjDetail'), {
 })();
 
 /* ════════════════════════════════════════════════════
-   TAB 3 — STRENGTHS/WEAKNESSES CHARTS
-════════════════════════════════════════════════════ */
-new Chart(document.getElementById('cStrengths'), {
-  type:'line',
-  data:{labels:LABELS,datasets:[
-    {label:'Henitsoa',  data:HEN_SCORES,   borderColor:C.hen,   backgroundColor:C.henBg, fill:true, tension:.4,pointRadius:6,borderWidth:2.5},
-    {label:'Top 20',    data:TOP20_SCORES, borderColor:C.top20, backgroundColor:'transparent',fill:false,tension:.4,pointRadius:5,borderWidth:2,borderDash:[6,3]},
-    {label:'Trinitaire',data:TRI_SCORES,   borderColor:C.tri,   backgroundColor:'transparent',fill:false,tension:.4,pointRadius:5,borderWidth:2,borderDash:[3,3]}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'top'}},
-    scales:{y:{min:0,max:20,title:{display:true,text:'Score /20'},grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}}
-});
-
-new Chart(document.getElementById('cGap'), {
-  type:'bar',
-  data:{labels:GAPS.map(g=>g[0]),datasets:[{
-    label:'Lacune vs Top 20 (%)',
-    data:GAPS.map(g=>Math.abs(g[3])),
-    backgroundColor:GAPS.map(g=>{const v=Math.abs(g[3]);return v>=60?'#7f1d1d':v>=45?'#dc2626':v>=35?'#f97316':'#d97706';}),
-    borderRadius:6
-  }]},
-  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`Retard de ${ctx.raw}% vs Top 20`}}},
-    scales:{x:{title:{display:true,text:'Lacune (%)'},max:80,grid:{color:'#f1f5f9'}},y:{grid:{display:false}}}}
-});
-
-/* ════════════════════════════════════════════════════
-   TAB 4 — CLASSEMENTS
+   TAB 1 — CLASSEMENTS (schools chart + top10)
 ════════════════════════════════════════════════════ */
 new Chart(document.getElementById('cSchools'), {
   type:'bar',
@@ -896,22 +781,8 @@ new Chart(document.getElementById('cSchools'), {
   });
 })();
 
-(function buildTop20(){
-  const tb=document.getElementById('top20-table');
-  TOP20_STU.forEach(d=>{
-    const isTri=d.etab.includes('TRINITAIRE');
-    const et=d.etab.length>30?d.etab.slice(0,30)+'…':d.etab;
-    tb.innerHTML+=`<tr>
-      <td><span class="rank-badge ${d.rang===1?'rb-1':d.rang<=3?'rb-2':d.rang<=5?'rb-3':'rb-n'}">${d.rang}</span></td>
-      <td style="font-size:.81rem;font-weight:500">${d.nom}</td>
-      <td style="font-size:.79rem;color:${isTri?C.tri:'var(--muted)'}">${et}</td>
-      <td style="color:${C.top20};font-weight:700">${d.moy}</td>
-    </tr>`;
-  });
-})();
-
 /* ════════════════════════════════════════════════════
-   TAB 5 — STUDENT ANALYSIS
+   TAB 3 — STUDENT ANALYSIS
 ════════════════════════════════════════════════════ */
 // Populate dropdown
 const sel = document.getElementById('student-select');
