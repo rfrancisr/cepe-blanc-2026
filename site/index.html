@@ -239,24 +239,62 @@
   </div>
 
   <div class="chart-header">
-    <h3>📊 Comment Henitsoa se compare-t-il par matière ?</h3>
-    <p>Le graphique à barres compare les scores normalisés /20 d'Henitsoa, des 20 meilleurs élèves et de Trinitaire (leader des établissements). Le radar à droite synthétise en un coup d'œil le profil global — les zones creuses révèlent les matières à renforcer en priorité.</p>
+    <h3>🔎 Bilan général — niveaux d'urgence par matière</h3>
+    <p>Les matières sont regroupées selon l'ampleur de leur retard. Cette lecture rapide permet de prioriser l'action pédagogique : commencez par les cases rouges, puis orange, avant de consolider les acquis.</p>
   </div>
 
   <div class="grid-2">
-    <div class="card">
-      <div class="card-title">📈 Scores moyens par matière (normalisés /20)</div>
-      <div class="legend">
-        <div class="legend-item"><div class="ldot ldot-hen"></div> Henitsoa</div>
-        <div class="legend-item"><div class="ldot ldot-top20"></div> Top 20 élèves</div>
-        <div class="legend-item"><div class="ldot ldot-tri"></div> Trinitaire</div>
+    <div>
+      <div class="alert a-danger">
+        <h4>🔴 Lacunes critiques — Priorité absolue</h4>
+        <ul>
+          <li><strong>Problème (−65,4%)</strong> : 6,55/20 vs 18,95/20. Raisonnement mathématique très insuffisant.</li>
+          <li><strong>Opération (−42,1%)</strong> : 11,20/20 vs 19,35/20. Bases arithmétiques fragiles.</li>
+        </ul>
       </div>
-      <div class="ch-tall"><canvas id="cOverview"></canvas></div>
+      <div class="alert a-warn">
+        <h4>🟠 Lacunes importantes</h4>
+        <ul>
+          <li><strong>Géographie (−36,9%)</strong> : 11,61/20 vs 18,40/20.</li>
+          <li><strong>TTFM (−34,9%)</strong> : 11,29/20 vs 17,35/20.</li>
+          <li><strong>Malagasy (−30,5%)</strong> : 10,18/20 — difficulté générale.</li>
+          <li><strong>SVT (−29,9%)</strong> : 12,55/20 vs 17,90/20.</li>
+        </ul>
+      </div>
     </div>
-    <div class="card">
-      <div class="card-title">🎯 Radar des compétences</div>
-      <div class="ch-radar"><canvas id="cRadar"></canvas></div>
+    <div>
+      <div class="alert a-ok">
+        <h4>🟢 Point fort relatif</h4>
+        <ul>
+          <li><strong>Français (−22,1%)</strong> : 14,03/20 — la matière la moins en retard.</li>
+          <li>2 élèves dans le Top 100 → potentiel d'excellence.</li>
+          <li>Meilleur élève Henitsoa : 40/40 en Problème, 36/40 en SVT.</li>
+        </ul>
+      </div>
+      <div class="alert a-info">
+        <h4>🔵 Observations</h4>
+        <ul>
+          <li>Forte dispersion : rang 30 au rang 1332 au sein de l'école.</li>
+          <li>Malagasy — faiblesse partagée par toutes les écoles.</li>
+          <li>Maths (Op + Pb) = 30% de la note totale → impact maximal.</li>
+        </ul>
+      </div>
     </div>
+  </div>
+
+  <div class="chart-header">
+    <h3>🎯 Radar des compétences — profil global par matière</h3>
+    <p>Le radar compare Henitsoa, le Top 20 et Trinitaire sur toutes les matières simultanément. Les zones creuses de la surface rouge indiquent les matières à renforcer ; les zones qui se rapprochent du bleu montrent les points d'appui à valoriser.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 Radar des compétences</div>
+    <div class="legend">
+      <div class="legend-item"><div class="ldot ldot-hen"></div> Henitsoa</div>
+      <div class="legend-item"><div class="ldot ldot-top20"></div> Top 20 élèves</div>
+      <div class="legend-item"><div class="ldot ldot-tri"></div> Trinitaire</div>
+    </div>
+    <div style="height:380px;position:relative;"><canvas id="cRadar"></canvas></div>
   </div>
 
   <div class="chart-header">
@@ -335,51 +373,7 @@
   <div class="section-subtitle">Diagnostic pédagogique — comparaison vs les 20 meilleurs élèves</div>
 
   <div class="tab-intro">
-    <p><strong>De la vue d'ensemble au détail.</strong> Le diagnostic commence par un bilan général organisé par niveaux d'urgence (alertes), puis plonge dans le profil complet sur toutes les matières, et se termine par un classement précis des lacunes de la plus critique à la plus légère.</p>
-  </div>
-
-  <div class="chart-header">
-    <h3>🔎 Bilan général — niveaux d'urgence par matière</h3>
-    <p>Les matières sont regroupées selon l'ampleur de leur retard. Cette lecture rapide permet de prioriser l'action pédagogique : commencez par les cases rouges, puis orange, avant de consolider les acquis.</p>
-  </div>
-
-  <div class="grid-2">
-    <div>
-      <div class="alert a-danger">
-        <h4>🔴 Lacunes critiques — Priorité absolue</h4>
-        <ul>
-          <li><strong>Problème (−65,4%)</strong> : 6,55/20 vs 18,95/20. Raisonnement mathématique très insuffisant.</li>
-          <li><strong>Opération (−42,1%)</strong> : 11,20/20 vs 19,35/20. Bases arithmétiques fragiles.</li>
-        </ul>
-      </div>
-      <div class="alert a-warn">
-        <h4>🟠 Lacunes importantes</h4>
-        <ul>
-          <li><strong>Géographie (−36,9%)</strong> : 11,61/20 vs 18,40/20.</li>
-          <li><strong>TTFM (−34,9%)</strong> : 11,29/20 vs 17,35/20.</li>
-          <li><strong>Malagasy (−30,5%)</strong> : 10,18/20 — difficulté générale.</li>
-          <li><strong>SVT (−29,9%)</strong> : 12,55/20 vs 17,90/20.</li>
-        </ul>
-      </div>
-    </div>
-    <div>
-      <div class="alert a-ok">
-        <h4>🟢 Point fort relatif</h4>
-        <ul>
-          <li><strong>Français (−22,1%)</strong> : 14,03/20 — la matière la moins en retard.</li>
-          <li>2 élèves dans le Top 100 → potentiel d'excellence.</li>
-          <li>Meilleur élève Henitsoa : 40/40 en Problème, 36/40 en SVT.</li>
-        </ul>
-      </div>
-      <div class="alert a-info">
-        <h4>🔵 Observations</h4>
-        <ul>
-          <li>Forte dispersion : rang 30 au rang 1332 au sein de l'école.</li>
-          <li>Malagasy — faiblesse partagée par toutes les écoles.</li>
-          <li>Maths (Op + Pb) = 30% de la note totale → impact maximal.</li>
-        </ul>
-      </div>
-    </div>
+    <p><strong>Deux visualisations complémentaires.</strong> Le profil de compétences (courbe) montre la forme générale du niveau d'Henitsoa sur toutes les matières à la fois. La carte des lacunes classe ensuite les matières par ordre d'urgence d'intervention, du retard le plus critique au plus léger.</p>
   </div>
 
   <div class="chart-header">
@@ -753,21 +747,6 @@ function tagClass(pct) {
 /* ════════════════════════════════════════════════════
    TAB 1 CHARTS
 ════════════════════════════════════════════════════ */
-new Chart(document.getElementById('cOverview'), {
-  type: 'bar',
-  data: {
-    labels: LABELS,
-    datasets: [
-      {label:'Henitsoa', data:HEN_SCORES,   backgroundColor:C.henA,   borderRadius:4},
-      {label:'Top 20',   data:TOP20_SCORES, backgroundColor:C.top20A, borderRadius:4},
-      {label:'Trinitaire',data:TRI_SCORES,  backgroundColor:C.triA,   borderRadius:4}
-    ]
-  },
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{position:'top'}},
-    scales:{y:{min:0,max:20,title:{display:true,text:'Score /20'},grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}}
-});
-
 new Chart(document.getElementById('cRadar'), {
   type: 'radar',
   data: {
