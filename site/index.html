@@ -175,6 +175,14 @@
 
   footer{background:#1a2332;color:rgba(255,255,255,.6);text-align:center;padding:1.4rem;font-size:.79rem;margin-top:2rem;}
   footer strong{color:white;}
+
+  /* CHART SECTION HEADERS */
+  .chart-header{margin:1.8rem 0 .8rem;}
+  .chart-header h3{font-size:1.06rem;font-weight:700;color:var(--primary);margin-bottom:.35rem;padding-bottom:.35rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:.4rem;}
+  .chart-header p{font-size:.86rem;color:var(--muted);line-height:1.6;margin-top:.4rem;}
+  .tab-intro{background:var(--card);border-radius:12px;padding:1.1rem 1.4rem;margin-bottom:1.8rem;border-left:4px solid var(--secondary);box-shadow:0 1px 4px rgba(0,0,0,.06);}
+  .tab-intro p{font-size:.88rem;color:var(--text);line-height:1.65;}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--secondary);color:white;font-size:.72rem;font-weight:800;flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -230,6 +238,11 @@
     <div class="kpi-card green"><div class="kpi-label">Meilleure matière</div><div class="kpi-value">Français</div><div class="kpi-sub">14,03/20 — écart −22%</div></div>
   </div>
 
+  <div class="chart-header">
+    <h3>📊 Comment Henitsoa se compare-t-il par matière ?</h3>
+    <p>Le graphique à barres compare les scores normalisés /20 d'Henitsoa, des 20 meilleurs élèves et de Trinitaire (leader des établissements). Le radar à droite synthétise en un coup d'œil le profil global — les zones creuses révèlent les matières à renforcer en priorité.</p>
+  </div>
+
   <div class="grid-2">
     <div class="card">
       <div class="card-title">📈 Scores moyens par matière (normalisés /20)</div>
@@ -244,6 +257,11 @@
       <div class="card-title">🎯 Radar des compétences</div>
       <div class="ch-radar"><canvas id="cRadar"></canvas></div>
     </div>
+  </div>
+
+  <div class="chart-header">
+    <h3>📈 Où se situent les élèves d'Henitsoa dans le classement général ?</h3>
+    <p>Distribution des 56 élèves par tranches de rangs sur les 1 332 participants. Cette vue révèle la polarisation de l'école : quelques excellents éléments en tête, une majorité au milieu du classement, et un groupe en difficulté à accompagner en priorité.</p>
   </div>
 
   <div class="card">
@@ -265,6 +283,15 @@
   <div class="section-title">Analyse détaillée par matière</div>
   <div class="section-subtitle">Scores normalisés /20 — comparaison Henitsoa vs Top 20 vs Trinitaire</div>
 
+  <div class="tab-intro">
+    <p><strong>Lecture : du général au particulier.</strong> Commencez par les barres visuelles <strong>(étape 1)</strong> pour identifier rapidement les matières en retard, puis explorez le graphique comparatif <strong>(étape 2)</strong> pour une vue d'ensemble, et terminez par le tableau chiffré <strong>(étape 3)</strong> pour les données précises.</p>
+  </div>
+
+  <div class="chart-header">
+    <h3><span class="step-num">1</span> Où sont les plus grands écarts ? — vue synthétique</h3>
+    <p>Chaque barre rouge (Henitsoa) est superposée au fond bleu (Top 20). Plus le rouge est court par rapport au bleu, plus le retard est important. Le badge en % quantifie l'écart relatif entre Henitsoa et les 20 meilleurs élèves du concours.</p>
+  </div>
+
   <div class="card">
     <div class="card-title">📏 Écart par matière (Henitsoa vs Top 20)</div>
     <div class="legend" style="margin-bottom:1.5rem;">
@@ -274,9 +301,19 @@
     <div id="subject-bars"></div>
   </div>
 
+  <div class="chart-header">
+    <h3><span class="step-num">2</span> Comparaison complète — Henitsoa, Top 20 et Trinitaire</h3>
+    <p>Vue côte à côte des trois références pour chaque matière. Ce graphique permet de situer Henitsoa dans le spectre complet : entre l'école leader (Trinitaire) et les 20 meilleurs élèves individuels du concours. Observez les matières où Trinitaire dépasse aussi le Top 20 individuel.</p>
+  </div>
+
   <div class="card">
     <div class="card-title">📊 Comparaison détaillée par matière</div>
     <div style="height:360px;position:relative;"><canvas id="cSubjDetail"></canvas></div>
+  </div>
+
+  <div class="chart-header">
+    <h3><span class="step-num">3</span> Tableau chiffré — les données précises par matière</h3>
+    <p>Scores bruts, normalisés /20, écarts absolus et relatifs. Le niveau de diagnostic traduit l'urgence d'action : de ✅ Acceptable (écart &lt; 22%) à 🔴 Critique (écart &gt; 50%). Utilisez ce tableau comme référence pour le suivi des progrès.</p>
   </div>
 
   <div class="card">
@@ -296,6 +333,15 @@
 <div id="points" class="section"><div class="container">
   <div class="section-title">Forces et faiblesses</div>
   <div class="section-subtitle">Diagnostic pédagogique — comparaison vs les 20 meilleurs élèves</div>
+
+  <div class="tab-intro">
+    <p><strong>De la vue d'ensemble au détail.</strong> Le diagnostic commence par un bilan général organisé par niveaux d'urgence (alertes), puis plonge dans le profil complet sur toutes les matières, et se termine par un classement précis des lacunes de la plus critique à la plus légère.</p>
+  </div>
+
+  <div class="chart-header">
+    <h3>🔎 Bilan général — niveaux d'urgence par matière</h3>
+    <p>Les matières sont regroupées selon l'ampleur de leur retard. Cette lecture rapide permet de prioriser l'action pédagogique : commencez par les cases rouges, puis orange, avant de consolider les acquis.</p>
+  </div>
 
   <div class="grid-2">
     <div>
@@ -336,9 +382,19 @@
     </div>
   </div>
 
+  <div class="chart-header">
+    <h3>📉 Profil global des compétences — comparaison sur toutes les matières</h3>
+    <p>La courbe rouge (Henitsoa) est tracée contre les références Top 20 et Trinitaire. Les "vallées" de la courbe rouge signalent les matières à renforcer ; les zones où elle se rapproche des références indiquent les points d'appui à valoriser. La forme de la courbe donne une signature pédagogique de l'école.</p>
+  </div>
+
   <div class="card">
     <div class="card-title">📉 Profil de compétences Henitsoa vs références</div>
     <div style="height:340px;position:relative;"><canvas id="cStrengths"></canvas></div>
+  </div>
+
+  <div class="chart-header">
+    <h3>🎯 Classement des lacunes — de la plus critique à la plus légère</h3>
+    <p>Les matières sont triées par ordre décroissant de retard relatif (%). La couleur indique la criticité : rouge foncé (&gt; 60%) → action immédiate, rouge (&gt; 45%), orange (&gt; 35%), ambre (&lt; 35%). Problème et Opération concentrent l'essentiel du retard à combler.</p>
   </div>
 
   <div class="card">
@@ -355,6 +411,15 @@
   <div class="section-title">Classements &amp; palmarès</div>
   <div class="section-subtitle">Position de Henitsoa dans l'ensemble du concours</div>
 
+  <div class="tab-intro">
+    <p><strong>Deux niveaux de lecture.</strong> D'abord la vision macro : où Henitsoa se place-t-il parmi les 33 établissements ? Ensuite le zoom : qui sont les meilleurs élèves de l'école et quels profils représentent la cible d'excellence à atteindre ?</p>
+  </div>
+
+  <div class="chart-header">
+    <h3>🏫 Position d'Henitsoa parmi les établissements participants</h3>
+    <p>Classement des 15 premiers établissements par moyenne générale /20. Henitsoa (en rouge) occupe le 14ème rang sur 27. Ce graphique aide à visualiser l'écart avec les leaders et à identifier des cibles réalistes de progression (ex : intégrer le top 10 en 2027).</p>
+  </div>
+
   <div class="grid-2">
     <div class="card">
       <div class="card-title">🏫 Classement des établissements (top 15)</div>
@@ -367,6 +432,11 @@
         <tbody id="top10-table"></tbody></table>
       </div>
     </div>
+  </div>
+
+  <div class="chart-header">
+    <h3>🥇 Les 20 meilleurs élèves toutes écoles confondues — la cible d'excellence</h3>
+    <p>Le palmarès national du concours. À noter : 13 des 20 premiers viennent du Collège Trinitaire Sainte Marie, révélant une forte concentration de l'excellence dans un seul établissement. Ces profils — leurs scores par matière, leur régularité — représentent la référence vers laquelle orienter les meilleurs élèves d'Henitsoa.</p>
   </div>
 
   <div class="card">
@@ -384,6 +454,10 @@
 <div id="eleve" class="section"><div class="container">
   <div class="section-title">Analyse individuelle</div>
   <div class="section-subtitle">Sélectionnez un élève Henitsoa pour voir son profil complet comparé aux Top 20</div>
+
+  <div class="tab-intro">
+    <p><strong>Du général au particulier pour chaque élève.</strong> Le profil s'affiche en quatre niveaux : <strong>(1)</strong> carte synthétique (rang, moyenne), <strong>(2)</strong> radar et graphique à barres (vue globale des compétences), <strong>(3)</strong> barres de progression et tableau chiffré (matière par matière), <strong>(4)</strong> diagnostic personnalisé points forts / lacunes à combler.</p>
+  </div>
 
   <div class="student-selector">
     <div class="selector-row">
@@ -415,6 +489,11 @@
     </div>
 
     <!-- Charts -->
+    <div class="chart-header">
+      <h3>🎯 Vue globale des compétences — radar et comparaison par matière</h3>
+      <p>Le radar (gauche) montre d'un coup d'œil les forces et faiblesses relatives à la moyenne des Top 20. Le graphique à barres (droite) donne les valeurs exactes pour chaque matière.</p>
+    </div>
+
     <div class="stu-charts">
       <div class="card">
         <div class="card-title">🎯 Radar — Élève vs Top 20</div>
@@ -431,6 +510,11 @@
     </div>
 
     <!-- Score bars per subject -->
+    <div class="chart-header">
+      <h3>📏 Analyse matière par matière — du visuel au chiffré</h3>
+      <p>Les barres de progression (ci-dessous) donnent une lecture visuelle rapide. Le tableau détaillé qui suit fournit les données précises : score brut, normalisé /20, écart absolu et relatif vs Top 20, et diagnostic.</p>
+    </div>
+
     <div class="card">
       <div class="card-title">📏 Performance matière par matière</div>
       <div id="stu-bars"></div>
@@ -479,9 +563,19 @@
     <p style="font-size:.87rem;margin-top:.3rem;">Porter la moyenne Henitsoa de <strong>10,67/20</strong> à <strong>≥ 13,00/20</strong> (top 5 des établissements). Priorité absolue sur les <strong>maths (Problème + Opération)</strong> qui pèsent 30% de la note.</p>
   </div>
 
+  <div class="chart-header">
+    <h3>📋 Recommandations par matière — du plus urgent au moins urgent</h3>
+    <p>Chaque carte représente une matière, classée par niveau de priorité d'intervention. Les actions proposées sont concrètes et directement applicables. Commencez par les cartes rouges (Critique), puis orange, jaune, et enfin vert (à maintenir).</p>
+  </div>
+
   <div class="rec-grid" id="rec-grid"></div>
 
-  <div class="card" style="margin-top:2rem;">
+  <div class="chart-header" style="margin-top:2rem;">
+    <h3>📅 Plan d'action structuré sur 6 mois</h3>
+    <p>Les recommandations sont organisées en phases chronologiques : d'abord l'urgence mathématique (mois 1–2), puis la consolidation des matières intermédiaires (mois 2–4), et enfin la maintenance des points forts (mois 4–6). Une action de suivi individuel court sur toute la durée.</p>
+  </div>
+
+  <div class="card">
     <div class="card-title">📅 Plan d'action sur 6 mois</div>
     <div class="table-wrap">
       <table>
