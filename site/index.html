@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyse CEPE Blanc 2026 — Collège Privé Henitsoa</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --hen:     #dc2626;   /* Rouge Henitsoa  */
+    --top20:   #0284c7;   /* Bleu ciel Top20 */
+    --tri:     #d97706;   /* Ambre Trinitaire */
+    --hen-bg:  rgba(220,38,38,0.12);
+    --top20-bg:rgba(2,132,199,0.12);
+    --tri-bg:  rgba(217,119,6,0.12);
+
+    --primary: #1a3a5c;
+    --secondary:#1d4ed8;
+    --accent:  #f59e0b;
+    --danger:  #dc2626;
+    --success: #16a34a;
+    --warning: #ea580c;
+    --bg:      #f0f4f8;
+    --card:    #ffffff;
+    --text:    #1e293b;
+    --muted:   #64748b;
+    --border:  #e2e8f0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;}
+
+  /* HEADER */
+  header{background:linear-gradient(135deg,#7f1d1d 0%,#991b1b 50%,#b91c1c 100%);color:white;padding:2.5rem 1.5rem 2rem;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");}
+  .header-badge{display:inline-block;background:rgba(251,191,36,0.2);border:1px solid #fbbf24;color:#fbbf24;padding:.3rem 1rem;border-radius:20px;font-size:.8rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem;}
+  header h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:800;margin-bottom:.5rem;}
+  header p{font-size:1rem;opacity:.82;max-width:600px;margin:0 auto;}
+  .header-meta{margin-top:1.2rem;display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;}
+  .header-meta span{font-size:.85rem;opacity:.72;}
+
+  /* TABS */
+  .tabs{background:var(--card);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.08);}
+  .tabs-inner{max-width:1200px;margin:0 auto;display:flex;overflow-x:auto;}
+  .tab-btn{padding:.95rem 1.3rem;border:none;background:none;cursor:pointer;font-size:.87rem;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:all .2s;}
+  .tab-btn:hover{color:var(--danger);}
+  .tab-btn.active{color:var(--danger);border-bottom-color:var(--danger);}
+
+  /* SECTIONS */
+  .section{padding:2.5rem 0;display:none;}
+  .section.active{display:block;}
+  .container{max-width:1200px;margin:0 auto;padding:0 1rem;}
+  .section-title{font-size:1.5rem;font-weight:700;color:var(--primary);margin-bottom:.4rem;}
+  .section-subtitle{color:var(--muted);font-size:.95rem;margin-bottom:2rem;}
+
+  /* KPI */
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-bottom:2rem;}
+  .kpi-card{background:var(--card);border-radius:12px;padding:1.3rem 1.1rem;box-shadow:0 1px 4px rgba(0,0,0,.07);border-left:4px solid var(--border);transition:transform .2s;}
+  .kpi-card:hover{transform:translateY(-2px);}
+  .kpi-card.red{border-left-color:var(--hen);}
+  .kpi-card.blue{border-left-color:var(--top20);}
+  .kpi-card.amber{border-left-color:var(--tri);}
+  .kpi-card.green{border-left-color:var(--success);}
+  .kpi-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;margin-bottom:.4rem;}
+  .kpi-value{font-size:1.9rem;font-weight:800;line-height:1;}
+  .kpi-sub{font-size:.75rem;color:var(--muted);margin-top:.3rem;}
+  .kpi-card.red .kpi-value{color:var(--hen);}
+  .kpi-card.blue .kpi-value{color:var(--top20);}
+  .kpi-card.amber .kpi-value{color:var(--tri);}
+  .kpi-card.green .kpi-value{color:var(--success);}
+
+  /* CARDS */
+  .card{background:var(--card);border-radius:14px;padding:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:1.5rem;}
+  .card-title{font-size:1rem;font-weight:700;color:var(--primary);margin-bottom:1.1rem;display:flex;align-items:center;gap:.5rem;}
+
+  /* GRID */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+  @media(max-width:860px){.grid-2{grid-template-columns:1fr;}}
+
+  /* LEGEND */
+  .legend{display:flex;gap:1.4rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.82rem;}
+  .legend-item{display:flex;align-items:center;gap:.4rem;}
+  .ldot{width:13px;height:13px;border-radius:50%;}
+  .ldot-hen{background:var(--hen);}
+  .ldot-top20{background:var(--top20);}
+  .ldot-tri{background:var(--tri);}
+
+  /* SUBJECT BARS */
+  .sbar-row{margin-bottom:1.3rem;}
+  .sbar-label{display:flex;justify-content:space-between;font-size:.84rem;font-weight:600;margin-bottom:.35rem;}
+  .sbar-label .mat{color:var(--text);}
+  .sbar-label .scores{color:var(--muted);font-weight:400;font-size:.8rem;}
+  .sbar-track{background:#f1f5f9;border-radius:6px;height:18px;position:relative;overflow:hidden;}
+  .sbar-top20{position:absolute;top:0;left:0;height:100%;background:rgba(2,132,199,.18);border-radius:6px;}
+  .sbar-hen{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#dc2626,#ef4444);border-radius:6px;}
+
+  /* GAP BADGES */
+  .gbadge{display:inline-block;padding:.12rem .45rem;border-radius:4px;font-size:.71rem;font-weight:700;margin-left:.35rem;}
+  .g-crit{background:#fee2e2;color:#991b1b;}
+  .g-high{background:#ffedd5;color:#9a3412;}
+  .g-med{background:#fef9c3;color:#92400e;}
+  .g-ok{background:#dcfce7;color:#15803d;}
+  .g-super{background:#eff6ff;color:#1e40af;}
+
+  /* TABLES */
+  .table-wrap{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:.84rem;}
+  th{background:#f8fafc;color:var(--muted);text-transform:uppercase;font-size:.71rem;letter-spacing:.5px;padding:.65rem .75rem;text-align:left;border-bottom:2px solid var(--border);}
+  td{padding:.6rem .75rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+  tr:hover td{background:#fafbfc;}
+  .rank-badge{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;font-weight:800;font-size:.82rem;}
+  .rb-1{background:#fef3c7;color:#92400e;} .rb-2{background:#f1f5f9;color:#475569;} .rb-3{background:#fff7ed;color:#c2410c;} .rb-n{background:#fef2f2;color:#b91c1c;}
+  .sh{color:var(--success);font-weight:700;} .sm{color:var(--warning);font-weight:700;} .sl{color:var(--danger);font-weight:700;}
+
+  /* ALERTS */
+  .alert{border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:1rem;border-left:4px solid;}
+  .a-danger{background:#fef2f2;border-color:var(--hen);color:#7f1d1d;}
+  .a-warn{background:#fffbeb;border-color:var(--accent);color:#78350f;}
+  .a-ok{background:#f0fdf4;border-color:var(--success);color:#14532d;}
+  .a-info{background:#eff6ff;border-color:var(--top20);color:#1e3a8a;}
+  .alert h4{font-size:.9rem;font-weight:700;margin-bottom:.4rem;}
+  .alert ul{padding-left:1.2rem;font-size:.87rem;}
+  .alert ul li{margin-bottom:.25rem;}
+
+  /* RECOMMENDATION CARDS */
+  .rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem;}
+  .rec-card{background:var(--card);border-radius:12px;padding:1.2rem;border-top:4px solid;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .rc-crit{border-top-color:#dc2626;} .rc-high{border-top-color:#ea580c;} .rc-med{border-top-color:#d97706;} .rc-ok{border-top-color:#16a34a;}
+  .rec-prio{font-size:.71rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem;}
+  .rc-crit .rec-prio{color:#dc2626;} .rc-high .rec-prio{color:#ea580c;} .rc-med .rec-prio{color:#d97706;} .rc-ok .rec-prio{color:#16a34a;}
+  .rec-subj{font-size:1.05rem;font-weight:700;color:var(--primary);margin-bottom:.5rem;}
+  .rec-score{font-size:.81rem;color:var(--muted);margin-bottom:.7rem;}
+  .rec-text{font-size:.84rem;color:var(--text);line-height:1.55;}
+
+  /* CHART */
+  .ch-tall{height:320px;position:relative;} .ch-med{height:260px;position:relative;} .ch-radar{height:340px;position:relative;}
+
+  /* INTRO PANEL */
+  .intro-panel{background:linear-gradient(135deg,#7f1d1d 0%,#991b1b 100%);color:white;border-radius:14px;padding:2rem;margin-bottom:2rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;}
+  .intro-panel h2{font-size:1.3rem;margin-bottom:.5rem;}
+  .intro-panel p{opacity:.85;font-size:.89rem;line-height:1.6;}
+  .rank-circle{width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,.1);border:3px solid #fbbf24;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex-shrink:0;}
+  .rank-circle .num{font-size:2rem;font-weight:900;color:#fbbf24;line-height:1;}
+  .rank-circle .lbl{font-size:.62rem;opacity:.8;text-transform:uppercase;letter-spacing:.5px;}
+  @media(max-width:600px){.intro-panel{grid-template-columns:1fr;text-align:center;}.rank-circle{margin:0 auto;}}
+
+  /* ─── STUDENT TAB ─── */
+  .student-selector{background:var(--card);border-radius:14px;padding:1.4rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.07);}
+  .selector-row{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;}
+  .selector-label{font-weight:700;color:var(--primary);font-size:.95rem;white-space:nowrap;}
+  .student-select{flex:1;min-width:280px;padding:.65rem .9rem;border:2px solid var(--border);border-radius:8px;font-size:.9rem;color:var(--text);background:white;cursor:pointer;transition:border-color .2s;font-family:inherit;}
+  .student-select:focus{outline:none;border-color:var(--hen);}
+  .student-card{background:linear-gradient(135deg,#7f1d1d,#b91c1c);color:white;border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;display:grid;grid-template-columns:auto 1fr auto;gap:1.5rem;align-items:center;}
+  .sc-avatar{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.15);border:3px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:1.8rem;}
+  .sc-name{font-size:1.15rem;font-weight:800;line-height:1.3;margin-bottom:.4rem;}
+  .sc-meta{font-size:.83rem;opacity:.82;}
+  .sc-moy-box{text-align:center;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);border-radius:12px;padding:.8rem 1.2rem;}
+  .sc-moy-val{font-size:2rem;font-weight:900;line-height:1;}
+  .sc-moy-lbl{font-size:.68rem;opacity:.8;text-transform:uppercase;letter-spacing:.5px;}
+  .stu-charts{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
+  @media(max-width:860px){.stu-charts{grid-template-columns:1fr;}.student-card{grid-template-columns:auto 1fr;}.sc-moy-box{grid-column:1/-1;}}
+  .swf-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+  @media(max-width:860px){.swf-grid{grid-template-columns:1fr;}}
+  .tag{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.75rem;font-weight:700;margin:.1rem;}
+  .t-str{background:#dcfce7;color:#14532d;} .t-ok{background:#eff6ff;color:#1e40af;} .t-weak{background:#ffedd5;color:#9a3412;} .t-crit{background:#fee2e2;color:#991b1b;}
+  #stu-placeholder{text-align:center;padding:3rem;color:var(--muted);}
+  #stu-placeholder .ph-icon{font-size:3rem;margin-bottom:.8rem;}
+  #stu-content{display:none;}
+
+  /* PERCENTILE BAR */
+  .pct-bar-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.5rem;font-size:.83rem;}
+  .pct-bar-label{width:80px;text-align:right;color:var(--muted);font-size:.78rem;}
+  .pct-bar-track{flex:1;height:10px;background:#f1f5f9;border-radius:5px;overflow:hidden;position:relative;}
+  .pct-bar-fill{height:100%;border-radius:5px;transition:width .6s ease;}
+  .pct-bar-val{width:50px;font-weight:700;font-size:.78rem;}
+
+  footer{background:#1a2332;color:rgba(255,255,255,.6);text-align:center;padding:1.4rem;font-size:.79rem;margin-top:2rem;}
+  footer strong{color:white;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">📊 Analyse CEPE Blanc 2026</div>
+  <h1>Collège Privé Henitsoa</h1>
+  <p>Analyse comparative des performances — Identification des lacunes et recommandations pédagogiques</p>
+  <div class="header-meta">
+    <span>📅 Examen Blanc 2026</span>
+    <span>🏫 33 établissements</span>
+    <span>👥 1 332 élèves</span>
+    <span>📚 7 matières</span>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="showTab('vue-ensemble',this)">📋 Vue d'ensemble</button>
+    <button class="tab-btn" onclick="showTab('comparaison',this)">📊 Comparaison matières</button>
+    <button class="tab-btn" onclick="showTab('points',this)">⚡ Points forts & faibles</button>
+    <button class="tab-btn" onclick="showTab('classement',this)">🏆 Classements</button>
+    <button class="tab-btn" onclick="showTab('eleve',this)">🎓 Analyse par élève</button>
+    <button class="tab-btn" onclick="showTab('recommandations',this)">🎯 Recommandations</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 1 : VUE D'ENSEMBLE
+═══════════════════════════════════════════════════ -->
+<div id="vue-ensemble" class="section active"><div class="container">
+
+  <div class="intro-panel">
+    <div>
+      <h2>Collège Privé Henitsoa — Résumé exécutif</h2>
+      <p>Avec une moyenne de <strong>10,67/20</strong>, Henitsoa se classe <strong>14ème sur 27 établissements</strong>.
+      L'écart vs le leader (Trinitaire : 15,46/20) est de <strong>4,79 pts</strong>.
+      Vs les 20 meilleurs élèves (moy. 17,75/20) le retard atteint <strong>7,08 pts</strong>.
+      Les matières <strong>Problème et Opération</strong> sont les lacunes les plus critiques.</p>
+    </div>
+    <div class="rank-circle">
+      <span class="num">14<sup style="font-size:.9rem">e</sup></span>
+      <span class="lbl">sur 27<br>écoles</span>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card red"><div class="kpi-label">Moyenne Henitsoa</div><div class="kpi-value">10,67</div><div class="kpi-sub">sur 20 — 56 élèves</div></div>
+    <div class="kpi-card amber"><div class="kpi-label">Écart vs Trinitaire</div><div class="kpi-value">−4,79</div><div class="kpi-sub">Trinitaire : 15,46/20</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Écart vs Top 20</div><div class="kpi-value">−7,08</div><div class="kpi-sub">Top 20 moy. : 17,75/20</div></div>
+    <div class="kpi-card amber"><div class="kpi-label">Meilleur rang Henitsoa</div><div class="kpi-value">30<sup style="font-size:1rem">e</sup></div><div class="kpi-sub">sur 1 332 élèves</div></div>
+    <div class="kpi-card red"><div class="kpi-label">Pire lacune</div><div class="kpi-value">−65%</div><div class="kpi-sub">Problème vs Top 20</div></div>
+    <div class="kpi-card green"><div class="kpi-label">Meilleure matière</div><div class="kpi-value">Français</div><div class="kpi-sub">14,03/20 — écart −22%</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">📈 Scores moyens par matière (normalisés /20)</div>
+      <div class="legend">
+        <div class="legend-item"><div class="ldot ldot-hen"></div> Henitsoa</div>
+        <div class="legend-item"><div class="ldot ldot-top20"></div> Top 20 élèves</div>
+        <div class="legend-item"><div class="ldot ldot-tri"></div> Trinitaire</div>
+      </div>
+      <div class="ch-tall"><canvas id="cOverview"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 Radar des compétences</div>
+      <div class="ch-radar"><canvas id="cRadar"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Distribution des rangs — élèves Henitsoa (sur 1 332)</div>
+    <div class="ch-med"><canvas id="cDist"></canvas></div>
+    <div style="margin-top:1rem;display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;font-size:.81rem;">
+      <div style="text-align:center;padding:.6rem;background:#dcfce7;border-radius:8px;"><div style="font-weight:700;color:#15803d;font-size:1.05rem">2 élèves</div><div style="color:#166534">Top 100 (3,6%)</div></div>
+      <div style="text-align:center;padding:.6rem;background:#fef9c3;border-radius:8px;"><div style="font-weight:700;color:#a16207;font-size:1.05rem">25 élèves</div><div style="color:#92400e">Rang 101–500 (44,6%)</div></div>
+      <div style="text-align:center;padding:.6rem;background:#fee2e2;border-radius:8px;"><div style="font-weight:700;color:#b91c1c;font-size:1.05rem">12 élèves</div><div style="color:#991b1b">Rang 1001+ (21,4%)</div></div>
+    </div>
+  </div>
+
+</div></div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 2 : COMPARAISON MATIÈRES
+═══════════════════════════════════════════════════ -->
+<div id="comparaison" class="section"><div class="container">
+  <div class="section-title">Analyse détaillée par matière</div>
+  <div class="section-subtitle">Scores normalisés /20 — comparaison Henitsoa vs Top 20 vs Trinitaire</div>
+
+  <div class="card">
+    <div class="card-title">📏 Écart par matière (Henitsoa vs Top 20)</div>
+    <div class="legend" style="margin-bottom:1.5rem;">
+      <div class="legend-item"><div class="ldot ldot-hen"></div> Henitsoa (rouge)</div>
+      <div class="legend-item"><div class="ldot ldot-top20" style="opacity:.35"></div> Top 20 (fond bleu)</div>
+    </div>
+    <div id="subject-bars"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📊 Comparaison détaillée par matière</div>
+    <div style="height:360px;position:relative;"><canvas id="cSubjDetail"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Tableau récapitulatif — Scores normalisés /20</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Matière</th><th>Barème</th><th>Henitsoa</th><th>Top 20</th><th>Trinitaire</th><th>Écart vs Top20</th><th>Gap %</th><th>Niveau</th></tr></thead>
+        <tbody id="subj-table"></tbody>
+      </table>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 3 : POINTS FORTS & FAIBLES
+═══════════════════════════════════════════════════ -->
+<div id="points" class="section"><div class="container">
+  <div class="section-title">Forces et faiblesses</div>
+  <div class="section-subtitle">Diagnostic pédagogique — comparaison vs les 20 meilleurs élèves</div>
+
+  <div class="grid-2">
+    <div>
+      <div class="alert a-danger">
+        <h4>🔴 Lacunes critiques — Priorité absolue</h4>
+        <ul>
+          <li><strong>Problème (−65,4%)</strong> : 6,55/20 vs 18,95/20. Raisonnement mathématique très insuffisant.</li>
+          <li><strong>Opération (−42,1%)</strong> : 11,20/20 vs 19,35/20. Bases arithmétiques fragiles.</li>
+        </ul>
+      </div>
+      <div class="alert a-warn">
+        <h4>🟠 Lacunes importantes</h4>
+        <ul>
+          <li><strong>Géographie (−36,9%)</strong> : 11,61/20 vs 18,40/20.</li>
+          <li><strong>TTFM (−34,9%)</strong> : 11,29/20 vs 17,35/20.</li>
+          <li><strong>Malagasy (−30,5%)</strong> : 10,18/20 — difficulté générale.</li>
+          <li><strong>SVT (−29,9%)</strong> : 12,55/20 vs 17,90/20.</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="alert a-ok">
+        <h4>🟢 Point fort relatif</h4>
+        <ul>
+          <li><strong>Français (−22,1%)</strong> : 14,03/20 — la matière la moins en retard.</li>
+          <li>2 élèves dans le Top 100 → potentiel d'excellence.</li>
+          <li>Meilleur élève Henitsoa : 40/40 en Problème, 36/40 en SVT.</li>
+        </ul>
+      </div>
+      <div class="alert a-info">
+        <h4>🔵 Observations</h4>
+        <ul>
+          <li>Forte dispersion : rang 30 au rang 1332 au sein de l'école.</li>
+          <li>Malagasy — faiblesse partagée par toutes les écoles.</li>
+          <li>Maths (Op + Pb) = 30% de la note totale → impact maximal.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📉 Profil de compétences Henitsoa vs références</div>
+    <div style="height:340px;position:relative;"><canvas id="cStrengths"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 Carte des lacunes — Retard en % vs Top 20</div>
+    <div style="height:300px;position:relative;"><canvas id="cGap"></canvas></div>
+    <p style="font-size:.79rem;color:var(--muted);margin-top:.7rem;text-align:center;">Plus la barre est longue, plus le retard est critique. Problème et Opération nécessitent une action immédiate.</p>
+  </div>
+</div></div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 4 : CLASSEMENTS
+═══════════════════════════════════════════════════ -->
+<div id="classement" class="section"><div class="container">
+  <div class="section-title">Classements &amp; palmarès</div>
+  <div class="section-subtitle">Position de Henitsoa dans l'ensemble du concours</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">🏫 Classement des établissements (top 15)</div>
+      <div style="height:420px;position:relative;"><canvas id="cSchools"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">🌟 Top 10 élèves Henitsoa</div>
+      <div class="table-wrap">
+        <table><thead><tr><th>#</th><th>Nom</th><th>Rang gén.</th><th>Moy.</th></tr></thead>
+        <tbody id="top10-table"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🥇 Top 20 toutes écoles</div>
+    <div class="table-wrap">
+      <table><thead><tr><th>Rang</th><th>Nom</th><th>Établissement</th><th>Moyenne</th></tr></thead>
+      <tbody id="top20-table"></tbody></table>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 5 : ANALYSE PAR ÉLÈVE
+═══════════════════════════════════════════════════ -->
+<div id="eleve" class="section"><div class="container">
+  <div class="section-title">Analyse individuelle</div>
+  <div class="section-subtitle">Sélectionnez un élève Henitsoa pour voir son profil complet comparé aux Top 20</div>
+
+  <div class="student-selector">
+    <div class="selector-row">
+      <span class="selector-label">🎓 Élève :</span>
+      <select class="student-select" id="student-select" onchange="loadStudent()">
+        <option value="">— Choisissez un élève —</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="stu-placeholder">
+    <div class="ph-icon">👆</div>
+    <p style="font-size:1rem;font-weight:600;color:var(--primary)">Sélectionnez un élève dans la liste</p>
+    <p style="font-size:.87rem;margin-top:.4rem">Choisissez parmi les 56 élèves du Collège Privé Henitsoa pour voir l'analyse détaillée de ses résultats et sa comparaison avec les 20 meilleurs élèves du concours.</p>
+  </div>
+
+  <div id="stu-content">
+    <!-- Student info card -->
+    <div class="student-card" id="stu-card">
+      <div class="sc-avatar" id="stu-avatar">👤</div>
+      <div>
+        <div class="sc-name" id="stu-name">—</div>
+        <div class="sc-meta" id="stu-meta">—</div>
+      </div>
+      <div class="sc-moy-box">
+        <div class="sc-moy-val" id="stu-moy">—</div>
+        <div class="sc-moy-lbl">Moyenne /20</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="stu-charts">
+      <div class="card">
+        <div class="card-title">🎯 Radar — Élève vs Top 20</div>
+        <div class="legend">
+          <div class="legend-item"><div class="ldot ldot-hen"></div> Cet élève</div>
+          <div class="legend-item"><div class="ldot ldot-top20"></div> Top 20 (moy.)</div>
+        </div>
+        <div style="height:280px;position:relative;"><canvas id="stu-radar"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Scores par matière vs Top 20</div>
+        <div style="height:310px;position:relative;"><canvas id="stu-bar"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Score bars per subject -->
+    <div class="card">
+      <div class="card-title">📏 Performance matière par matière</div>
+      <div id="stu-bars"></div>
+    </div>
+
+    <!-- Analysis table -->
+    <div class="card">
+      <div class="card-title">📋 Tableau d'analyse détaillé</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Matière</th><th>Barème</th><th>Score brut</th><th>Score /20</th><th>Top 20 /20</th><th>Écart</th><th>Gap %</th><th>Diagnostic</th></tr></thead>
+          <tbody id="stu-table"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Strengths / Weaknesses -->
+    <div class="swf-grid">
+      <div class="card">
+        <div class="card-title">💪 Points forts de cet élève</div>
+        <div id="stu-strengths">—</div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚠️ Lacunes à combler</div>
+        <div id="stu-weaknesses">—</div>
+      </div>
+    </div>
+
+    <!-- Percentile bar -->
+    <div class="card">
+      <div class="card-title">📈 Score normalisé /20 par matière — barre de progression</div>
+      <div id="stu-pct-bars"></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 6 : RECOMMANDATIONS
+═══════════════════════════════════════════════════ -->
+<div id="recommandations" class="section"><div class="container">
+  <div class="section-title">Plan d'action pédagogique</div>
+  <div class="section-subtitle">Recommandations prioritaires basées sur l'analyse des lacunes</div>
+
+  <div class="alert a-info" style="margin-bottom:2rem;">
+    <h4>🎯 Objectif</h4>
+    <p style="font-size:.87rem;margin-top:.3rem;">Porter la moyenne Henitsoa de <strong>10,67/20</strong> à <strong>≥ 13,00/20</strong> (top 5 des établissements). Priorité absolue sur les <strong>maths (Problème + Opération)</strong> qui pèsent 30% de la note.</p>
+  </div>
+
+  <div class="rec-grid" id="rec-grid"></div>
+
+  <div class="card" style="margin-top:2rem;">
+    <div class="card-title">📅 Plan d'action sur 6 mois</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Phase</th><th>Période</th><th>Priorité</th><th>Actions</th><th>Objectif</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Phase 1</strong></td><td>Mois 1–2</td><td><span class="gbadge g-crit">URGENT</span></td><td>Renforcement intensif Problème + Opération. Diagnostic individuel. Groupes de soutien.</td><td>Problème ≥ 10/20<br>Opération ≥ 15/20</td></tr>
+          <tr><td><strong>Phase 2</strong></td><td>Mois 2–4</td><td><span class="gbadge g-high">IMPORTANT</span></td><td>Géographie + TTFM approfondis. Visites éducatives. Révisions SVT systématiques.</td><td>Géographie ≥ 13/20<br>TTFM ≥ 13/20</td></tr>
+          <tr><td><strong>Phase 3</strong></td><td>Mois 4–6</td><td><span class="gbadge g-med">CONSOLIDER</span></td><td>Malagasy + Français. Examens blancs mensuels. Tutorat entre pairs.</td><td>Moy. générale ≥ 13/20</td></tr>
+          <tr><td><strong>Continu</strong></td><td>Tout au long</td><td><span class="gbadge g-ok">STRUCTUREL</span></td><td>Valoriser les 2 élèves Top 100. Suivi des 12 élèves du bas classement.</td><td>Rang &gt;1000 : de 12 à &lt;5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.5rem;">
+    <div class="alert a-ok">
+      <h4>✅ Ce que fait bien Henitsoa</h4>
+      <ul>
+        <li>Français bien maîtrisé (14,03/20)</li>
+        <li>2 élèves dans le Top 100 — excellence possible</li>
+        <li>56 élèves : taille idéale pour un suivi individualisé</li>
+        <li>SVT dans la moyenne des bonnes écoles</li>
+      </ul>
+    </div>
+    <div class="alert a-warn">
+      <h4>⚠️ Erreurs à éviter</h4>
+      <ul>
+        <li>Ne focaliser que sur les bons élèves — les 12 derniers drainent la moyenne</li>
+        <li>Aborder Problème sans bases solides en Opération</li>
+        <li>Négliger Malagasy — difficulté générale mais impact réel</li>
+        <li>Ignorer la dispersion : écart 16,85 → 3,0 au sein de l'école</li>
+      </ul>
+    </div>
+  </div>
+</div></div>
+
+<footer>
+  <strong>Analyse CEPE Blanc 2026 — Collège Privé Henitsoa</strong><br>
+  1 332 élèves · 33 établissements · 7 matières<br>
+  <span style="color:rgba(255,255,255,.35);font-size:.74rem;">Rapport généré à partir des données de l'examen blanc releve_de_note.xlsx</span>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════════ -->
+<script>
+/* ─── PALETTE ─────────────────────────────────────── */
+const C = {
+  hen:    '#dc2626',  henA:  'rgba(220,38,38,0.82)',   henBg: 'rgba(220,38,38,0.12)',
+  top20:  '#0284c7',  top20A:'rgba(2,132,199,0.82)',   top20Bg:'rgba(2,132,199,0.12)',
+  tri:    '#d97706',  triA:  'rgba(217,119,6,0.82)',   triBg: 'rgba(217,119,6,0.12)',
+};
+
+/* ─── STATIC DATA ──────────────────────────────────── */
+const LABELS   = ['Opération','Problème','SVT','TTFM','Géographie','Malagasy','Français'];
+const SUBJECTS = ['operation','probleme','svt','ttfm','geographie','malagasy','francais'];
+const BAREME   = [20,40,40,20,20,40,20];
+
+const HEN_SCORES  = [11.20, 6.55,  12.55, 11.29, 11.61, 10.18, 14.03];
+const TOP20_SCORES= [19.35, 18.95, 17.90, 17.35, 18.40, 14.65, 18.02];
+const TRI_SCORES  = [18.28, 18.03, 15.59, 15.39, 15.30, 11.74, 14.98];
+
+const GAPS = [
+  ['Problème',  6.55, 18.95, -65.4],
+  ['Opération', 11.20,19.35, -42.1],
+  ['Géographie',11.61,18.40, -36.9],
+  ['TTFM',           11.29,17.35, -34.9],
+  ['Malagasy',       10.18,14.65, -30.5],
+  ['SVT',            12.55,17.90, -29.9],
+  ['Français',  14.03,18.02, -22.1]
+];
+
+const DIST = [
+  {label:'Top 100', count:2, pct:3.6},
+  {label:'101-300', count:10,pct:17.9},
+  {label:'301-500', count:15,pct:26.8},
+  {label:'501-700', count:9, pct:16.1},
+  {label:'701-1000',count:8, pct:14.3},
+  {label:'1001+',   count:12,pct:21.4}
+];
+
+const SCHOOLS = [
+  {name:'COLLEGE TRINITAIRE SAINTE MARIE',  avg:15.46,count:127,hen:false},
+  {name:'COLLEGE PRIVE LES CHERUBINS',       avg:13.10,count:39, hen:false},
+  {name:'LE PROGRES',                        avg:12.71,count:32, hen:false},
+  {name:'COLLEGE DES JUNIORS LA RUCHE',      avg:12.59,count:29, hen:false},
+  {name:'ECOLE PRIVEE LA LUMIERE',           avg:12.03,count:35, hen:false},
+  {name:'COLLEGE CATHOLIQUE STE CECILLE',    avg:11.96,count:45, hen:false},
+  {name:'ECOLE SANTISIMA TRINIDAD',          avg:11.41,count:13, hen:false},
+  {name:'COLLEGE PRIVE NOE MISSION',         avg:11.30,count:27, hen:false},
+  {name:'SEKOLY TOBILEHIBE ANDROTRA',        avg:11.24,count:7,  hen:false},
+  {name:'SEKOLY MD JEAN DE MATHA',           avg:11.19,count:58, hen:false},
+  {name:'ECOLE PRIVEE VALISOA',              avg:11.16,count:5,  hen:false},
+  {name:'ETABL. ANDRIAMANDIMBY',             avg:11.14,count:34, hen:false},
+  {name:'ECOLE PRIVEE LES ETOILES',          avg:10.71,count:12, hen:false},
+  {name:'COLLEGE PRIVE HENITSOA',            avg:10.67,count:56, hen:true },
+  {name:'EPP ANDROTRA',                      avg:10.41,count:51, hen:false}
+];
+
+const TOP10_HEN = [
+  {nom:'FENITRARIHASINA VOAHANGINANTENAINA',rang:30, moy:16.85},
+  {nom:'ANJARANIAINA ANJELINAH',            rang:46, moy:16.50},
+  {nom:'RAMAHANDRY OCéANNE NARDY',    rang:140,moy:14.85},
+  {nom:'ANDRIAMISAINA HARENA FAHENDRENA',   rang:169,moy:14.50},
+  {nom:'MIANDRILALA MIKAJY ITOERANTSOA',    rang:177,moy:14.35},
+  {nom:'RABEMANANTSOA TSITOHAINA FINARITRA',rang:222,moy:13.70},
+  {nom:'ANDRIANJAFY NY ARO NOTAHIANJANAHAR',rang:229,moy:13.50},
+  {nom:'ANDRIANIRINA YASMIE',               rang:256,moy:13.20},
+  {nom:'RANDRIAMAMPIONINA HARINIAINA',      rang:270,moy:13.00},
+  {nom:'RAMIHARISOA FANIRINIAINA VALISOA',  rang:270,moy:13.00}
+];
+
+const TOP20_STU = [
+  {nom:'RAZAFIARISOA Idealy Fandeferana Muriella',rang:1, moy:18.4, etab:'COLLEGE DES JUNIORS LA RUCHE'},
+  {nom:'RAVOAJANAHARY HERINILAINA MARIO',         rang:1, moy:18.4, etab:'ECOLE PRIVEE LES ETOILES'},
+  {nom:'ANDRIANALIJAONA Aintsoa Zo Karen',         rang:3, moy:18.2, etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'RANDRIANANDRASANA Mitia Lorenah',          rang:4, moy:18.15,etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'HERINASANDRATRA Roch Steeve',              rang:5, moy:18.1, etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'ANDRIATOAVINA Tsiavonana Jean Brindto',    rang:6, moy:18.0, etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'ANDRIARILALA Faniriantsoa Faustinah',      rang:7, moy:18.0, etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'RAKOTOHARISOA Manjakaniavo Judaïl',   rang:8, moy:17.85,etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'ANDRIAMANANTENASOA Narovana Fitia',         rang:8, moy:17.85,etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'TANDRIFY NOTSONGAINA Orima Nancia',         rang:10,moy:17.65,etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'ANDRIAMAHATONY Heriniaina Nampoina',        rang:11,moy:17.6, etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'MAMONJIHARIMANGANAVALONA Antsolalaim',      rang:11,moy:17.6, etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'RONJANIAINA Miarintsoa Azard',              rang:13,moy:17.55,etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'NICKY Diane Rosia Razanajafy',              rang:14,moy:17.5, etab:'COLLEGE DES JUNIORS LA RUCHE'},
+  {nom:'RATSIMBAZAFY Minosoa Annah',                rang:14,moy:17.5, etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'NIRINASON Joan Arland',                     rang:16,moy:17.4, etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'HERINJAKA Fiavisoa Vanellah',               rang:16,moy:17.4, etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'RAMAROSANDRATANA Nirintsoa Iarilalaina',    rang:18,moy:17.35,etab:'COLLEGE TRINITAIRE SAINTE MARIE'},
+  {nom:'RAHARISON RINAH JENNY',                     rang:19,moy:17.2, etab:'COLLEGE CATHOLIQUE SAINTE CECILLE'},
+  {nom:'ANJARANIAINA Miantsa Fitia',                rang:19,moy:17.2, etab:'COLLEGE PRIVE LES CHERUBINS'}
+];
+
+/* ─── STUDENT DATA (56 élèves Henitsoa) ─────────────
+   nom, rang, moyenne, sexe
+   norm[7] : scores normalisés /20
+   raw[7]  : scores bruts
+   gaps[7] : norm - top20
+   pcts[7] : gap en %
+─────────────────────────────────────────────────── */
+const STUDENTS = {"labels":["Opération","Problème","SVT","TTFM","Géographie","Malagasy","Français"],"subjects":["operation","probleme","svt","ttfm","geographie","malagasy","francais"],"top20Norm":[19.35,18.95,17.9,17.35,18.4,14.65,18.02],"students":[{"nom":"FENITRARIHASINA VOAHANGINANTENAINA","rang":30,"moyenne":16.85,"sexe":"F","norm":[16.0,20.0,18.0,13.5,14.0,15.5,18.0],"raw":[16.0,40.0,36.0,13.5,14.0,31.0,18.0],"gaps":[-3.35,1.05,0.1,-3.85,-4.4,0.85,-0.02],"pcts":[-17.3,5.5,0.6,-22.2,-23.9,5.8,-0.1]},{"nom":"ANJARANIAINA ANJELINAH","rang":46,"moyenne":16.5,"sexe":"F","norm":[16.0,17.0,19.0,17.0,13.0,13.5,20.0],"raw":[16.0,34.0,38.0,17.0,13.0,27.0,20.0],"gaps":[-3.35,-1.95,1.1,-0.35,-5.4,-1.15,1.98],"pcts":[-17.3,-10.3,6.1,-2.0,-29.3,-7.8,11.0]},{"nom":"RAMAHANDRY OCéANNE NARDY","rang":140,"moyenne":14.85,"sexe":"F","norm":[20.0,14.0,16.0,13.0,12.0,12.0,19.5],"raw":[20.0,28.0,32.0,13.0,12.0,24.0,19.5],"gaps":[0.65,-4.95,-1.9,-4.35,-6.4,-2.65,1.48],"pcts":[3.4,-26.1,-10.6,-25.1,-34.8,-18.1,8.2]},{"nom":"ANDRIAMISAINA HARENA FAHENDRENA","rang":169,"moyenne":14.5,"sexe":"F","norm":[13.0,12.0,14.5,15.0,14.0,15.0,20.0],"raw":[13.0,24.0,29.0,15.0,14.0,30.0,20.0],"gaps":[-6.35,-6.95,-3.4,-2.35,-4.4,0.35,1.98],"pcts":[-32.8,-36.7,-19.0,-13.5,-23.9,2.4,11.0]},{"nom":"MIANDRILALA MIKAJY ITOERANTSOA","rang":177,"moyenne":14.35,"sexe":"G","norm":[16.0,12.0,15.0,16.0,18.0,13.0,13.5],"raw":[16.0,24.0,30.0,16.0,18.0,26.0,13.5],"gaps":[-3.35,-6.95,-2.9,-1.35,-0.4,-1.65,-4.52],"pcts":[-17.3,-36.7,-16.2,-7.8,-2.2,-11.3,-25.1]},{"nom":"RABEMANANTSOA TSITOHAINA FINARITRA","rang":222,"moyenne":13.7,"sexe":"G","norm":[20.0,11.0,14.5,15.0,14.0,10.5,16.0],"raw":[20.0,22.0,29.0,15.0,14.0,21.0,16.0],"gaps":[0.65,-7.95,-3.4,-2.35,-4.4,-4.15,-2.02],"pcts":[3.4,-42.0,-19.0,-13.5,-23.9,-28.3,-11.2]},{"nom":"ANDRIANJAFY NY ARO NOTAHIANJANAHAR","rang":229,"moyenne":13.5,"sexe":"F","norm":[16.0,10.0,12.0,18.0,13.0,14.0,16.0],"raw":[16.0,20.0,24.0,18.0,13.0,28.0,16.0],"gaps":[-3.35,-8.95,-5.9,0.65,-5.4,-0.65,-2.02],"pcts":[-17.3,-47.2,-33.0,3.7,-29.3,-4.4,-11.2]},{"nom":"ANDRIANIRINA YASMIE","rang":256,"moyenne":13.2,"sexe":"F","norm":[9.0,8.0,14.0,13.0,20.0,14.0,18.0],"raw":[9.0,16.0,28.0,13.0,20.0,28.0,18.0],"gaps":[-10.35,-10.95,-3.9,-4.35,1.6,-0.65,-0.02],"pcts":[-53.5,-57.8,-21.8,-25.1,8.7,-4.4,-0.1]},{"nom":"RANDRIAMAMPIONINA HARINIAINA TSIARO","rang":270,"moyenne":13.0,"sexe":"G","norm":[16.0,4.0,18.0,15.0,24.0,9.0,13.0],"raw":[16.0,8.0,36.0,15.0,24.0,18.0,13.0],"gaps":[-3.35,-14.95,0.1,-2.35,5.6,-5.65,-5.02],"pcts":[-17.3,-78.9,0.6,-13.5,30.4,-38.6,-27.9]},{"nom":"RAMIHARISOA FANIRINIAINA VALISOA VER","rang":270,"moyenne":13.0,"sexe":"F","norm":[12.0,11.0,13.0,14.0,14.0,12.0,18.0],"raw":[12.0,22.0,26.0,14.0,14.0,24.0,18.0],"gaps":[-7.35,-7.95,-4.9,-3.35,-4.4,-2.65,-0.02],"pcts":[-38.0,-42.0,-27.4,-19.3,-23.9,-18.1,-0.1]},{"nom":"RANDRIANANTOANDRO NY AINA IARINIRIN","rang":282,"moyenne":12.9,"sexe":"F","norm":[13.0,11.0,17.0,10.5,12.0,10.5,16.5],"raw":[13.0,22.0,34.0,10.5,12.0,21.0,16.5],"gaps":[-6.35,-7.95,-0.9,-6.85,-6.4,-4.15,-1.52],"pcts":[-32.8,-42.0,-5.0,-39.5,-34.8,-28.3,-8.4]},{"nom":"RAPANOELA FANIRIANTSOA MITIA GLORIA","rang":290,"moyenne":12.8,"sexe":"F","norm":[12.0,10.0,13.5,13.5,14.0,12.0,17.5],"raw":[12.0,20.0,27.0,13.5,14.0,24.0,17.5],"gaps":[-7.35,-8.95,-4.4,-3.85,-4.4,-2.65,-0.52],"pcts":[-38.0,-47.2,-24.6,-22.2,-23.9,-18.1,-2.9]},{"nom":"RANDRIAMANANA HARENTSOA NY AVO EL","rang":313,"moyenne":12.6,"sexe":"F","norm":[10.0,5.0,15.5,12.5,13.0,15.5,18.5],"raw":[10.0,10.0,31.0,12.5,13.0,31.0,18.5],"gaps":[-9.35,-13.95,-2.4,-4.85,-5.4,0.85,0.48],"pcts":[-48.3,-73.6,-13.4,-28.0,-29.3,5.8,2.7]},{"nom":"ANDRIANAVALONA NOMENKASINA CANDY","rang":313,"moyenne":12.6,"sexe":"F","norm":[13.0,8.0,17.0,13.0,9.0,11.5,18.0],"raw":[13.0,16.0,34.0,13.0,9.0,23.0,18.0],"gaps":[-6.35,-10.95,-0.9,-4.35,-9.4,-3.15,-0.02],"pcts":[-32.8,-57.8,-5.0,-25.1,-51.1,-21.5,-0.1]},{"nom":"RAKOTONDRAZAFY NY ANTSA LUCIANO","rang":328,"moyenne":12.5,"sexe":"G","norm":[14.0,9.0,13.0,13.0,13.0,12.0,17.0],"raw":[14.0,18.0,26.0,13.0,13.0,24.0,17.0],"gaps":[-5.35,-9.95,-4.9,-4.35,-5.4,-2.65,-1.02],"pcts":[-27.6,-52.5,-27.4,-25.1,-29.3,-18.1,-5.7]},{"nom":"MAHAVORISOA MAHARANGA AARON","rang":336,"moyenne":12.4,"sexe":"G","norm":[16.0,10.0,16.5,12.5,18.0,6.0,12.5],"raw":[16.0,20.0,33.0,12.5,18.0,12.0,12.5],"gaps":[-3.35,-8.95,-1.4,-4.85,-0.4,-8.65,-5.52],"pcts":[-17.3,-47.2,-7.8,-28.0,-2.2,-59.0,-30.6]},{"nom":"FENOINA INDRAFO FANAMBINANA NY SOM","rang":351,"moyenne":12.3,"sexe":"F","norm":[13.0,12.0,13.5,13.0,14.0,11.5,9.0],"raw":[13.0,24.0,27.0,13.0,14.0,23.0,9.0],"gaps":[-6.35,-6.95,-4.4,-4.35,-4.4,-3.15,-9.02],"pcts":[-32.8,-36.7,-24.6,-25.1,-23.9,-21.5,-50.1]},{"nom":"RAKOTO ANDRIANARISAINA FANAJA IRINTS","rang":370,"moyenne":12.15,"sexe":"G","norm":[13.0,10.0,15.0,9.0,11.0,10.0,18.5],"raw":[13.0,20.0,30.0,9.0,11.0,20.0,18.5],"gaps":[-6.35,-8.95,-2.9,-8.35,-7.4,-4.65,0.48],"pcts":[-32.8,-47.2,-16.2,-48.1,-40.2,-31.7,2.7]},{"nom":"RABENIONY ALEX MARIO ALPHONSIO","rang":378,"moyenne":12.1,"sexe":"G","norm":[13.0,10.0,12.0,13.0,12.0,10.5,18.0],"raw":[13.0,20.0,24.0,13.0,12.0,21.0,18.0],"gaps":[-6.35,-8.95,-5.9,-4.35,-6.4,-4.15,-0.02],"pcts":[-32.8,-47.2,-33.0,-25.1,-34.8,-28.3,-0.1]},{"nom":"RAVONJISON FITIAVANA ANNITAH OLIVIAN","rang":391,"moyenne":12.0,"sexe":"F","norm":[9.0,13.0,7.5,13.0,25.0,10.0,12.0],"raw":[9.0,26.0,15.0,13.0,25.0,20.0,12.0],"gaps":[-10.35,-5.95,-10.4,-4.35,6.6,-4.65,-6.02],"pcts":[-53.5,-31.4,-58.1,-25.1,35.9,-31.7,-33.4]},{"nom":"RANDRIANASOLO NIRINASOA ERICA","rang":399,"moyenne":11.9,"sexe":"F","norm":[17.0,6.0,11.5,12.5,14.0,11.5,17.5],"raw":[17.0,12.0,23.0,12.5,14.0,23.0,17.5],"gaps":[-2.35,-12.95,-6.4,-4.85,-4.4,-3.15,-0.52],"pcts":[-12.1,-68.3,-35.8,-28.0,-23.9,-21.5,-2.9]},{"nom":"RAMASIMANANA NOMENJANAHARY MIRIN","rang":433,"moyenne":11.65,"sexe":"F","norm":[7.0,9.0,15.0,12.0,12.5,10.5,16.0],"raw":[7.0,18.0,30.0,12.0,12.5,21.0,16.0],"gaps":[-12.35,-9.95,-2.9,-5.35,-5.9,-4.15,-2.02],"pcts":[-63.8,-52.5,-16.2,-30.8,-32.1,-28.3,-11.2]},{"nom":"SOAFIAVY RONNY","rang":438,"moyenne":11.6,"sexe":"G","norm":[12.0,8.0,15.0,13.0,9.0,9.5,17.0],"raw":[12.0,16.0,30.0,13.0,9.0,19.0,17.0],"gaps":[-7.35,-10.95,-2.9,-4.35,-9.4,-5.15,-1.02],"pcts":[-38.0,-57.8,-16.2,-25.1,-51.1,-35.2,-5.7]},{"nom":"NATREHANIAVOARIVELO NIOBY LAURÉAT","rang":451,"moyenne":11.55,"sexe":"G","norm":[14.0,7.0,13.0,12.5,15.0,8.5,17.0],"raw":[14.0,14.0,26.0,12.5,15.0,17.0,17.0],"gaps":[-5.35,-11.95,-4.9,-4.85,-3.4,-6.15,-1.02],"pcts":[-27.6,-63.1,-27.4,-28.0,-18.5,-42.0,-5.7]},{"nom":"HARILALA MIARISOA AÏCHA","rang":477,"moyenne":11.35,"sexe":"F","norm":[10.0,2.0,17.5,11.0,16.0,11.5,14.5],"raw":[10.0,4.0,35.0,11.0,16.0,23.0,14.5],"gaps":[-9.35,-16.95,-0.4,-6.35,-2.4,-3.15,-3.52],"pcts":[-48.3,-89.4,-2.2,-36.6,-13.0,-21.5,-19.5]},{"nom":"RANARIVELO JEAN BERTHIN","rang":477,"moyenne":11.35,"sexe":"G","norm":[10.0,5.0,12.5,10.0,17.0,11.5,18.5],"raw":[10.0,10.0,25.0,10.0,17.0,23.0,18.5],"gaps":[-9.35,-13.95,-5.4,-7.35,-1.4,-3.15,0.48],"pcts":[-48.3,-73.6,-30.2,-42.4,-7.6,-21.5,2.7]},{"nom":"ANDRIANAIVO IARONIAINA FINDRA NOËLS","rang":491,"moyenne":11.3,"sexe":"G","norm":[16.0,7.0,14.5,12.0,13.0,9.0,11.0],"raw":[16.0,14.0,29.0,12.0,13.0,18.0,11.0],"gaps":[-3.35,-11.95,-3.4,-5.35,-5.4,-5.65,-7.02],"pcts":[-17.3,-63.1,-19.0,-30.8,-29.3,-38.6,-39.0]},{"nom":"MAMINIRINA IALITIANA AMYKA","rang":508,"moyenne":11.15,"sexe":"F","norm":[12.0,4.0,13.5,13.5,15.0,12.0,12.0],"raw":[12.0,8.0,27.0,13.5,15.0,24.0,12.0],"gaps":[-7.35,-14.95,-4.4,-3.85,-3.4,-2.65,-6.02],"pcts":[-38.0,-78.9,-24.6,-22.2,-18.5,-18.1,-33.4]},{"nom":"RANDRIAMBOAVONJY ANTSANIAINA FITAH","rang":539,"moyenne":10.95,"sexe":"F","norm":[13.0,8.0,15.0,8.5,9.0,9.0,15.0],"raw":[13.0,16.0,30.0,8.5,9.0,18.0,15.0],"gaps":[-6.35,-10.95,-2.9,-8.85,-9.4,-5.65,-3.02],"pcts":[-32.8,-57.8,-16.2,-51.0,-51.1,-38.6,-16.8]},{"nom":"RAKOTONDRAJAONA ONIMIANTSA YANNA","rang":582,"moyenne":10.7,"sexe":"F","norm":[12.0,8.0,14.0,6.0,7.0,11.5,15.0],"raw":[12.0,16.0,28.0,6.0,7.0,23.0,15.0],"gaps":[-7.35,-10.95,-3.9,-11.35,-11.4,-3.15,-3.02],"pcts":[-38.0,-57.8,-21.8,-65.4,-62.0,-21.5,-16.8]},{"nom":"SOA HARINONY MIARO HARIVOLA HÉLÈNA","rang":582,"moyenne":10.7,"sexe":"F","norm":[8.0,3.0,14.0,15.0,10.0,12.0,16.0],"raw":[8.0,6.0,28.0,15.0,10.0,24.0,16.0],"gaps":[-11.35,-15.95,-3.9,-2.35,-8.4,-2.65,-2.02],"pcts":[-58.7,-84.2,-21.8,-13.5,-45.7,-18.1,-11.2]},{"nom":"RAVONIMAMPIANINA NOELISOA SAHAZA","rang":582,"moyenne":10.7,"sexe":"F","norm":[11.0,10.0,14.0,6.5,4.0,10.0,17.5],"raw":[11.0,20.0,28.0,6.5,4.0,20.0,17.5],"gaps":[-8.35,-8.95,-3.9,-10.85,-14.4,-4.65,-0.52],"pcts":[-43.2,-47.2,-21.8,-62.5,-78.3,-31.7,-2.9]},{"nom":"ANDRIAMIHAJA TSIORY HARENA","rang":616,"moyenne":10.5,"sexe":"G","norm":[16.0,7.0,11.0,8.0,9.0,10.5,15.0],"raw":[16.0,14.0,22.0,8.0,9.0,21.0,15.0],"gaps":[-3.35,-11.95,-6.9,-9.35,-9.4,-4.15,-3.02],"pcts":[-17.3,-63.1,-38.5,-53.9,-51.1,-28.3,-16.8]},{"nom":"ANDRIANANTENAINA NAMBININTSOA FABR","rang":616,"moyenne":10.5,"sexe":"G","norm":[16.0,8.0,9.5,12.0,10.0,10.0,12.0],"raw":[16.0,16.0,19.0,12.0,10.0,20.0,12.0],"gaps":[-3.35,-10.95,-8.4,-5.35,-8.4,-4.65,-6.02],"pcts":[-17.3,-57.8,-46.9,-30.8,-45.7,-31.7,-33.4]},{"nom":"TSIMILAHATSY TSIKASIHY","rang":624,"moyenne":10.45,"sexe":"F","norm":[8.0,3.0,10.5,18.5,10.0,13.0,15.0],"raw":[8.0,6.0,21.0,18.5,10.0,26.0,15.0],"gaps":[-11.35,-15.95,-7.4,1.15,-8.4,-1.65,-3.02],"pcts":[-58.7,-84.2,-41.3,6.6,-45.7,-11.3,-16.8]},{"nom":"RAMAHA NOMENJANAHARY JHENSY","rang":676,"moyenne":10.1,"sexe":"F","norm":[12.0,2.0,11.5,11.5,12.5,11.5,15.0],"raw":[12.0,4.0,23.0,11.5,12.5,23.0,15.0],"gaps":[-7.35,-16.95,-6.4,-5.85,-5.9,-3.15,-3.02],"pcts":[-38.0,-89.4,-35.8,-33.7,-32.1,-21.5,-16.8]},{"nom":"RANDRIAMAMPIANINA MITIA NY AVO KATH","rang":757,"moyenne":9.65,"sexe":"F","norm":[8.0,1.0,10.0,14.0,14.0,11.0,16.5],"raw":[8.0,2.0,20.0,14.0,14.0,22.0,16.5],"gaps":[-11.35,-17.95,-7.9,-3.35,-4.4,-3.65,-1.52],"pcts":[-58.7,-94.7,-44.1,-19.3,-23.9,-24.9,-8.4]},{"nom":"ANDRIANIARIVOLOLONIAINA HASAMBARA","rang":805,"moyenne":9.35,"sexe":"G","norm":[12.0,4.0,14.5,10.5,11.0,5.0,13.0],"raw":[12.0,8.0,29.0,10.5,11.0,10.0,13.0],"gaps":[-7.35,-14.95,-3.4,-6.85,-7.4,-9.65,-5.02],"pcts":[-38.0,-78.9,-19.0,-39.5,-40.2,-65.9,-27.9]},{"nom":"RASOLOFOMANDIMBY FANIRY MANOVASO","rang":819,"moyenne":9.3,"sexe":"G","norm":[14.0,4.0,13.0,8.0,8.0,9.5,10.0],"raw":[14.0,8.0,26.0,8.0,8.0,19.0,10.0],"gaps":[-5.35,-14.95,-4.9,-9.35,-10.4,-5.15,-8.02],"pcts":[-27.6,-78.9,-27.4,-53.9,-56.5,-35.2,-44.5]},{"nom":"RAKOTONINDRINA AVOTRINIAINA JEREMIA","rang":833,"moyenne":9.26,"sexe":"G","norm":[12.0,0.05,12.5,12.5,12.0,9.5,12.0],"raw":[12.0,0.1,25.0,12.5,12.0,19.0,12.0],"gaps":[-7.35,-18.9,-5.4,-4.85,-6.4,-5.15,-6.02],"pcts":[-38.0,-99.7,-30.2,-28.0,-34.8,-35.2,-33.4]},{"nom":"ANDRIANIAINA FITIA HENINTSOA","rang":904,"moyenne":8.9,"sexe":"F","norm":[11.0,4.0,9.5,10.0,8.0,12.0,9.0],"raw":[11.0,8.0,19.0,10.0,8.0,24.0,9.0],"gaps":[-8.35,-14.95,-8.4,-7.35,-10.4,-2.65,-9.02],"pcts":[-43.2,-78.9,-46.9,-42.4,-56.5,-18.1,-50.1]},{"nom":"RASOLOSON NY FY TIAVINA SOAMITOETRA","rang":924,"moyenne":8.8,"sexe":"G","norm":[9.0,1.0,11.5,11.0,9.0,10.0,14.0],"raw":[9.0,2.0,23.0,11.0,9.0,20.0,14.0],"gaps":[-10.35,-17.95,-6.4,-6.35,-9.4,-4.65,-4.02],"pcts":[-53.5,-94.7,-35.8,-36.6,-51.1,-31.7,-22.3]},{"nom":"RASAHIVELO RATOVELO MAMIFY","rang":939,"moyenne":8.75,"sexe":"G","norm":[9.0,2.0,13.0,5.5,10.0,9.0,15.0],"raw":[9.0,4.0,26.0,5.5,10.0,18.0,15.0],"gaps":[-10.35,-16.95,-4.9,-11.85,-8.4,-5.65,-3.02],"pcts":[-53.5,-89.4,-27.4,-68.3,-45.7,-38.6,-16.8]},{"nom":"MAMISOA HANITRY NY AVO MIORA HAREN","rang":980,"moyenne":8.55,"sexe":"F","norm":[6.0,2.5,10.0,11.0,7.0,11.0,14.5],"raw":[6.0,5.0,20.0,11.0,7.0,22.0,14.5],"gaps":[-13.35,-16.45,-7.9,-6.35,-11.4,-3.65,-3.52],"pcts":[-69.0,-86.8,-44.1,-36.6,-62.0,-24.9,-19.5]},{"nom":"RAZAFIARINIAINA FITIAVANA JENNIE","rang":1005,"moyenne":8.4,"sexe":"F","norm":[10.0,6.0,6.0,12.0,10.0,10.0,8.0],"raw":[10.0,12.0,12.0,12.0,10.0,20.0,8.0],"gaps":[-9.35,-12.95,-11.9,-5.35,-8.4,-4.65,-10.02],"pcts":[-48.3,-68.3,-66.5,-30.8,-45.7,-31.7,-55.6]},{"nom":"RAHARINANTENAINA ANJARA MIRINDRA","rang":1057,"moyenne":8.05,"sexe":"F","norm":[13.0,4.0,9.5,5.5,10.0,9.5,6.0],"raw":[13.0,8.0,19.0,5.5,10.0,19.0,6.0],"gaps":[-6.35,-14.95,-8.4,-11.85,-8.4,-5.15,-12.02],"pcts":[-32.8,-78.9,-46.9,-68.3,-45.7,-35.2,-66.7]},{"nom":"RASENDRAHARISOLO SEDERAMALALA TEN","rang":1147,"moyenne":7.45,"sexe":"G","norm":[7.0,3.0,8.5,9.5,5.0,9.5,11.0],"raw":[7.0,6.0,17.0,9.5,5.0,19.0,11.0],"gaps":[-12.35,-15.95,-9.4,-7.85,-13.4,-5.15,-7.02],"pcts":[-63.8,-84.2,-52.5,-45.2,-72.8,-35.2,-39.0]},{"nom":"RAKOTOSATA GABRELIA GLORIEL","rang":1152,"moyenne":7.4,"sexe":"F","norm":[8.0,0.5,11.0,8.0,4.0,11.0,9.0],"raw":[8.0,1.0,22.0,8.0,4.0,22.0,9.0],"gaps":[-11.35,-18.45,-6.9,-9.35,-14.4,-3.65,-9.02],"pcts":[-58.7,-97.4,-38.5,-53.9,-78.3,-24.9,-50.1]},{"nom":"RANDRIANANTENAINA SOLOHERY TAHINA","rang":1163,"moyenne":7.35,"sexe":"G","norm":[5.0,5.0,5.25,8.0,2.0,12.0,14.0],"raw":[5.0,10.0,10.5,8.0,2.0,24.0,14.0],"gaps":[-14.35,-13.95,-12.65,-9.35,-16.4,-2.65,-4.02],"pcts":[-74.2,-73.6,-70.7,-53.9,-89.1,-18.1,-22.3]},{"nom":"HANITRA NOMENY DIEUNITSARA EURICE","rang":1197,"moyenne":7.0,"sexe":"F","norm":[6.0,1.0,10.5,9.0,18.0,3.5,7.0],"raw":[6.0,2.0,21.0,9.0,18.0,7.0,7.0],"gaps":[-13.35,-17.95,-7.4,-8.35,-0.4,-11.15,-11.02],"pcts":[-69.0,-94.7,-41.3,-48.1,-2.2,-76.1,-61.2]},{"nom":"ANDONIAINA FENOVALA ANJARATIANA AR","rang":1207,"moyenne":6.9,"sexe":"F","norm":[7.0,2.0,10.0,6.0,6.0,7.5,11.0],"raw":[7.0,4.0,20.0,6.0,6.0,15.0,11.0],"gaps":[-12.35,-16.95,-7.9,-11.35,-12.4,-7.15,-7.02],"pcts":[-63.8,-89.4,-44.1,-65.4,-67.4,-48.8,-39.0]},{"nom":"NAMBININDRAZA Fenovola Cyndia Rolmunho","rang":1240,"moyenne":6.5,"sexe":"G","norm":[7.0,1.0,9.0,10.0,8.0,5.0,10.0],"raw":[7.0,2.0,18.0,10.0,8.0,10.0,10.0],"gaps":[-12.35,-17.95,-8.9,-7.35,-10.4,-9.65,-8.02],"pcts":[-63.8,-94.7,-49.7,-42.4,-56.5,-65.9,-44.5]},{"nom":"RANAIVONIRINA LAFATRA ITOKIANA","rang":1242,"moyenne":6.45,"sexe":"G","norm":[4.0,2.0,10.5,7.5,7.0,6.5,8.0],"raw":[4.0,4.0,21.0,7.5,7.0,13.0,8.0],"gaps":[-15.35,-16.95,-7.4,-9.85,-11.4,-8.15,-10.02],"pcts":[-79.3,-89.4,-41.3,-56.8,-62.0,-55.6,-55.6]},{"nom":"NOMENJANAHARY MENDRIKA FITAHIANA","rang":1261,"moyenne":6.2,"sexe":"F","norm":[4.0,7.0,11.5,4.0,4.0,2.0,9.0],"raw":[4.0,14.0,23.0,4.0,4.0,4.0,9.0],"gaps":[-15.35,-11.95,-6.4,-13.35,-14.4,-12.65,-9.02],"pcts":[-79.3,-63.1,-35.8,-76.9,-78.3,-86.3,-50.1]},{"nom":"RAHARIMALALA LAVORARY KASSIE","rang":1281,"moyenne":5.9,"sexe":"F","norm":[0.0,2.0,10.5,8.0,10.0,4.5,7.0],"raw":[0,4.0,21.0,8.0,10.0,9.0,7.0],"gaps":[-19.35,-16.95,-7.4,-9.35,-8.4,-10.15,-11.02],"pcts":[-100.0,-89.4,-41.3,-53.9,-45.7,-69.3,-61.2]},{"nom":"KAJINIRINA MARIE ANTHONIAH","rang":1332,"moyenne":3.0,"sexe":"F","norm":[1.0,1.0,0.0,7.0,7.0,2.5,8.0],"raw":[1.0,2.0,0,7.0,7.0,5.0,8.0],"gaps":[-18.35,-17.95,-17.9,-10.35,-11.4,-12.15,-10.02],"pcts":[-94.8,-94.7,-100.0,-59.7,-62.0,-82.9,-55.6]}]};
+
+/* ─── CHART DEFAULTS ──────────────────────────────── */
+Chart.defaults.font.family = "'Segoe UI',system-ui,sans-serif";
+Chart.defaults.font.size   = 12;
+Chart.defaults.color       = '#64748b';
+
+/* ─── TAB NAVIGATION ─────────────────────────────── */
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  document.querySelector('.tabs').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ─── HELPER ──────────────────────────────────────── */
+function badgeClass(pct) {
+  if (pct >= 0)    return 'g-super';
+  if (pct >= -22)  return 'g-ok';
+  if (pct >= -35)  return 'g-med';
+  if (pct >= -50)  return 'g-high';
+  return 'g-crit';
+}
+function scoreColor(v) { return v >= 14 ? '#16a34a' : v >= 10 ? '#d97706' : '#dc2626'; }
+function tagClass(pct) {
+  if (pct >= 0)   return 't-str';
+  if (pct >= -22) return 't-ok';
+  if (pct >= -40) return 't-weak';
+  return 't-crit';
+}
+
+/* ════════════════════════════════════════════════════
+   TAB 1 CHARTS
+════════════════════════════════════════════════════ */
+new Chart(document.getElementById('cOverview'), {
+  type: 'bar',
+  data: {
+    labels: LABELS,
+    datasets: [
+      {label:'Henitsoa', data:HEN_SCORES,   backgroundColor:C.henA,   borderRadius:4},
+      {label:'Top 20',   data:TOP20_SCORES, backgroundColor:C.top20A, borderRadius:4},
+      {label:'Trinitaire',data:TRI_SCORES,  backgroundColor:C.triA,   borderRadius:4}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'}},
+    scales:{y:{min:0,max:20,title:{display:true,text:'Score /20'},grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('cRadar'), {
+  type: 'radar',
+  data: {
+    labels: LABELS,
+    datasets: [
+      {label:'Henitsoa', data:HEN_SCORES,   borderColor:C.hen,   backgroundColor:C.henBg,   pointBackgroundColor:C.hen,   borderWidth:2.5},
+      {label:'Top 20',   data:TOP20_SCORES, borderColor:C.top20, backgroundColor:C.top20Bg, pointBackgroundColor:C.top20, borderWidth:2},
+      {label:'Trinitaire',data:TRI_SCORES,  borderColor:C.tri,   backgroundColor:C.triBg,   pointBackgroundColor:C.tri,   borderWidth:2, borderDash:[5,3]}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{padding:12,font:{size:11}}}},
+    scales:{r:{min:0,max:20,ticks:{stepSize:5,font:{size:10}},pointLabels:{font:{size:11,weight:'600'}}}}}
+});
+
+new Chart(document.getElementById('cDist'), {
+  type:'bar',
+  data:{
+    labels:DIST.map(d=>d.label),
+    datasets:[{label:"Élèves Henitsoa",data:DIST.map(d=>d.count),
+      backgroundColor:['#16a34a','#4ade80','#fbbf24','#f97316','#ef4444','#991b1b'],borderRadius:6}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>`${ctx.raw} élèves (${DIST[ctx.dataIndex].pct}%)`}}},
+    scales:{y:{title:{display:true,text:'Élèves'},grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}}
+});
+
+/* ════════════════════════════════════════════════════
+   TAB 2 — SUBJECT BARS + CHART + TABLE
+════════════════════════════════════════════════════ */
+(function buildSubjectBars(){
+  const c = document.getElementById('subject-bars');
+  LABELS.forEach((lbl,i)=>{
+    const hen=HEN_SCORES[i], t20=TOP20_SCORES[i];
+    const pct = Math.round((hen-t20)/t20*100);
+    const henW = (hen/20*100).toFixed(1);
+    const t20W = (t20/20*100).toFixed(1);
+    c.innerHTML += `
+      <div class="sbar-row">
+        <div class="sbar-label">
+          <span class="mat">${lbl} <span class="gbadge ${badgeClass(pct)}">${pct}%</span></span>
+          <span class="scores">Henitsoa&nbsp;<strong>${hen.toFixed(2)}/20</strong> &nbsp;|&nbsp; Top&nbsp;20&nbsp;<strong>${t20.toFixed(2)}/20</strong></span>
+        </div>
+        <div class="sbar-track">
+          <div class="sbar-top20" style="width:${t20W}%"></div>
+          <div class="sbar-hen"   style="width:${henW}%"></div>
+        </div>
+      </div>`;
+  });
+})();
+
+new Chart(document.getElementById('cSubjDetail'), {
+  type:'bar',
+  data:{labels:LABELS,datasets:[
+    {label:'Henitsoa',  data:HEN_SCORES,   backgroundColor:C.henA,   borderRadius:4},
+    {label:'Top 20',    data:TOP20_SCORES, backgroundColor:C.top20A, borderRadius:4},
+    {label:'Trinitaire',data:TRI_SCORES,   backgroundColor:C.triA,   borderRadius:4}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'}},
+    scales:{y:{min:0,max:20,title:{display:true,text:'Score /20'},grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}}
+});
+
+(function buildSubjTable(){
+  const tb = document.getElementById('subj-table');
+  const bar = [20,40,40,20,20,40,20];
+  LABELS.forEach((lbl,i)=>{
+    const hen=HEN_SCORES[i],t20=TOP20_SCORES[i],tri=TRI_SCORES[i];
+    const gap=(hen-t20).toFixed(2);
+    const pct=Math.round((hen-t20)/t20*100);
+    let lvl,lc;
+    if(pct>=-22){lvl='✅ Acceptable';lc='#16a34a';}
+    else if(pct>=-35){lvl='⚠️ À améliorer';lc='#a16207';}
+    else if(pct>=-50){lvl='🔶 Important';lc='#c2410c';}
+    else{lvl='🔴 Critique';lc='#b91c1c';}
+    tb.innerHTML+=`<tr>
+      <td><strong>${lbl}</strong></td>
+      <td style="color:var(--muted)">/${bar[i]}</td>
+      <td style="color:${scoreColor(hen)};font-weight:700">${hen}</td>
+      <td style="color:${C.top20};font-weight:700">${t20}</td>
+      <td style="color:${C.tri};font-weight:700">${tri}</td>
+      <td style="color:${pct<-40?'#b91c1c':pct<-30?'#c2410c':'#a16207'};font-weight:700">${gap}</td>
+      <td style="color:${pct<-40?'#b91c1c':pct<-30?'#c2410c':'#a16207'};font-weight:700">${pct}%</td>
+      <td style="color:${lc};font-weight:600;font-size:.81rem">${lvl}</td>
+    </tr>`;
+  });
+})();
+
+/* ════════════════════════════════════════════════════
+   TAB 3 — STRENGTHS/WEAKNESSES CHARTS
+════════════════════════════════════════════════════ */
+new Chart(document.getElementById('cStrengths'), {
+  type:'line',
+  data:{labels:LABELS,datasets:[
+    {label:'Henitsoa',  data:HEN_SCORES,   borderColor:C.hen,   backgroundColor:C.henBg, fill:true, tension:.4,pointRadius:6,borderWidth:2.5},
+    {label:'Top 20',    data:TOP20_SCORES, borderColor:C.top20, backgroundColor:'transparent',fill:false,tension:.4,pointRadius:5,borderWidth:2,borderDash:[6,3]},
+    {label:'Trinitaire',data:TRI_SCORES,   borderColor:C.tri,   backgroundColor:'transparent',fill:false,tension:.4,pointRadius:5,borderWidth:2,borderDash:[3,3]}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top'}},
+    scales:{y:{min:0,max:20,title:{display:true,text:'Score /20'},grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('cGap'), {
+  type:'bar',
+  data:{labels:GAPS.map(g=>g[0]),datasets:[{
+    label:'Lacune vs Top 20 (%)',
+    data:GAPS.map(g=>Math.abs(g[3])),
+    backgroundColor:GAPS.map(g=>{const v=Math.abs(g[3]);return v>=60?'#7f1d1d':v>=45?'#dc2626':v>=35?'#f97316':'#d97706';}),
+    borderRadius:6
+  }]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`Retard de ${ctx.raw}% vs Top 20`}}},
+    scales:{x:{title:{display:true,text:'Lacune (%)'},max:80,grid:{color:'#f1f5f9'}},y:{grid:{display:false}}}}
+});
+
+/* ════════════════════════════════════════════════════
+   TAB 4 — CLASSEMENTS
+════════════════════════════════════════════════════ */
+new Chart(document.getElementById('cSchools'), {
+  type:'bar',
+  data:{
+    labels:SCHOOLS.map(s=>s.name.length>23?s.name.slice(0,23)+'…':s.name),
+    datasets:[{label:'Moyenne /20',data:SCHOOLS.map(s=>s.avg),
+      backgroundColor:SCHOOLS.map(s=>s.hen?C.henA:'rgba(148,163,184,0.65)'),
+      borderColor:SCHOOLS.map(s=>s.hen?C.hen:'transparent'),
+      borderWidth:SCHOOLS.map(s=>s.hen?2.5:0),
+      borderRadius:4}]
+  },
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.raw}/20 — ${SCHOOLS[ctx.dataIndex].count} élèves`}}},
+    scales:{x:{min:8,max:17,title:{display:true,text:'Moyenne /20'},grid:{color:'#f1f5f9'}},y:{grid:{display:false},ticks:{font:{size:11}}}}}
+});
+
+(function buildTop10(){
+  const tb=document.getElementById('top10-table');
+  TOP10_HEN.forEach((d,i)=>{
+    const mc=d.moy>=15?'sh':d.moy>=12?'sm':'sl';
+    const nm=d.nom.length>28?d.nom.slice(0,28)+'…':d.nom;
+    tb.innerHTML+=`<tr>
+      <td><div class="rank-badge ${i===0?'rb-1':i===1?'rb-2':i===2?'rb-3':'rb-n'}">${i+1}</div></td>
+      <td style="font-size:.81rem">${nm}</td>
+      <td style="text-align:center;font-weight:700">#${d.rang}</td>
+      <td class="${mc}" style="font-weight:700">${d.moy}</td>
+    </tr>`;
+  });
+})();
+
+(function buildTop20(){
+  const tb=document.getElementById('top20-table');
+  TOP20_STU.forEach(d=>{
+    const isTri=d.etab.includes('TRINITAIRE');
+    const et=d.etab.length>30?d.etab.slice(0,30)+'…':d.etab;
+    tb.innerHTML+=`<tr>
+      <td><span class="rank-badge ${d.rang===1?'rb-1':d.rang<=3?'rb-2':d.rang<=5?'rb-3':'rb-n'}">${d.rang}</span></td>
+      <td style="font-size:.81rem;font-weight:500">${d.nom}</td>
+      <td style="font-size:.79rem;color:${isTri?C.tri:'var(--muted)'}">${et}</td>
+      <td style="color:${C.top20};font-weight:700">${d.moy}</td>
+    </tr>`;
+  });
+})();
+
+/* ════════════════════════════════════════════════════
+   TAB 5 — STUDENT ANALYSIS
+════════════════════════════════════════════════════ */
+// Populate dropdown
+const sel = document.getElementById('student-select');
+STUDENTS.students.forEach((s,idx) => {
+  const opt = document.createElement('option');
+  opt.value = idx;
+  opt.textContent = `#${s.rang} — ${s.nom} (${s.moyenne}/20)`;
+  sel.appendChild(opt);
+});
+
+// Chart instances (destroyed/recreated on each selection)
+let stuRadarChart = null, stuBarChart = null;
+
+function loadStudent() {
+  const idx = parseInt(sel.value);
+  if (isNaN(idx)) {
+    document.getElementById('stu-placeholder').style.display = 'block';
+    document.getElementById('stu-content').style.display = 'none';
+    return;
+  }
+  const s = STUDENTS.students[idx];
+  const t20 = STUDENTS.top20Norm;
+
+  // Show content
+  document.getElementById('stu-placeholder').style.display = 'none';
+  document.getElementById('stu-content').style.display   = 'block';
+
+  // Info card
+  document.getElementById('stu-avatar').textContent = s.sexe==='F' ? '👩' : '👨';
+  document.getElementById('stu-name').textContent   = s.nom;
+  document.getElementById('stu-meta').textContent   =
+    `${s.sexe==='F'?'Fille':'Garçon'} · Rang général : #${s.rang} sur 1 332 élèves · Collège Privé Henitsoa`;
+  document.getElementById('stu-moy').textContent    = s.moyenne.toFixed(2);
+
+  // Radar chart
+  if (stuRadarChart) stuRadarChart.destroy();
+  stuRadarChart = new Chart(document.getElementById('stu-radar'), {
+    type:'radar',
+    data:{labels:LABELS,datasets:[
+      {label:'Cet élève',data:s.norm,borderColor:C.hen,   backgroundColor:C.henBg,   pointBackgroundColor:C.hen,   borderWidth:2.5},
+      {label:'Top 20',   data:t20,   borderColor:C.top20, backgroundColor:C.top20Bg, pointBackgroundColor:C.top20, borderWidth:2}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{padding:10,font:{size:11}}}},
+      scales:{r:{min:0,max:20,ticks:{stepSize:5,font:{size:9}},pointLabels:{font:{size:10,weight:'600'}}}}}
+  });
+
+  // Bar chart
+  if (stuBarChart) stuBarChart.destroy();
+  stuBarChart = new Chart(document.getElementById('stu-bar'), {
+    type:'bar',
+    data:{labels:LABELS,datasets:[
+      {label:'Cet élève',data:s.norm, backgroundColor:C.henA,   borderRadius:4},
+      {label:'Top 20',   data:t20,    backgroundColor:C.top20A, borderRadius:4}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top'}},
+      scales:{y:{min:0,max:20,title:{display:true,text:'Score /20'},grid:{color:'#f1f5f9'}},x:{grid:{display:false}}}}
+  });
+
+  // Score bars per subject
+  const barsDiv = document.getElementById('stu-bars');
+  barsDiv.innerHTML = '';
+  LABELS.forEach((lbl,i)=>{
+    const v = s.norm[i], ref = t20[i];
+    const pct = Math.round((v-ref)/ref*100);
+    const vW  = (v/20*100).toFixed(1);
+    const rW  = (ref/20*100).toFixed(1);
+    barsDiv.innerHTML += `
+      <div class="sbar-row">
+        <div class="sbar-label">
+          <span class="mat">${lbl} <span class="gbadge ${badgeClass(pct)}">${pct>=0?'+':''}${pct}%</span></span>
+          <span class="scores">Élève&nbsp;<strong style="color:${C.hen}">${v.toFixed(1)}/20</strong> &nbsp;|&nbsp; Top&nbsp;20&nbsp;<strong style="color:${C.top20}">${ref.toFixed(2)}/20</strong></span>
+        </div>
+        <div class="sbar-track">
+          <div class="sbar-top20" style="width:${rW}%"></div>
+          <div class="sbar-hen"   style="width:${vW}%"></div>
+        </div>
+      </div>`;
+  });
+
+  // Analysis table
+  const tb = document.getElementById('stu-table');
+  tb.innerHTML = '';
+  LABELS.forEach((lbl,i)=>{
+    const raw=s.raw[i], norm=s.norm[i], ref=t20[i];
+    const gap=(norm-ref).toFixed(2), pct=s.pcts[i];
+    let diag,dc;
+    if(pct>=0){diag='✅ Au niveau';dc='#16a34a';}
+    else if(pct>=-22){diag='🟡 Proche';dc='#a16207';}
+    else if(pct>=-40){diag='🟠 À travailler';dc='#c2410c';}
+    else{diag='🔴 Critique';dc='#b91c1c';}
+    tb.innerHTML+=`<tr>
+      <td><strong>${lbl}</strong></td>
+      <td style="color:var(--muted)">/${BAREME[i]}</td>
+      <td style="font-weight:700">${raw}</td>
+      <td style="color:${scoreColor(norm)};font-weight:700">${norm.toFixed(1)}</td>
+      <td style="color:${C.top20};font-weight:700">${ref.toFixed(2)}</td>
+      <td style="color:${pct<-30?'#b91c1c':'#a16207'};font-weight:700">${gap}</td>
+      <td style="color:${pct<-30?'#b91c1c':'#a16207'};font-weight:700">${pct>=0?'+':''}${pct}%</td>
+      <td style="color:${dc};font-weight:600;font-size:.8rem">${diag}</td>
+    </tr>`;
+  });
+
+  // Strengths / Weaknesses
+  const sorted = LABELS.map((lbl,i)=>({lbl,pct:s.pcts[i],norm:s.norm[i]}))
+                        .sort((a,b)=>b.pct-a.pct);
+  const strong  = sorted.filter(x=>x.pct>=-22);
+  const weak    = sorted.filter(x=>x.pct<-22);
+
+  const strDiv = document.getElementById('stu-strengths');
+  if(strong.length===0){
+    strDiv.innerHTML='<p style="color:var(--muted);font-size:.87rem">Aucune matière au-dessus de la barre de −22% vs Top 20.</p>';
+  } else {
+    strDiv.innerHTML = strong.map(x=>`
+      <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem;padding:.6rem .8rem;background:#f0fdf4;border-radius:8px;">
+        <span class="tag ${tagClass(x.pct)}">${x.pct>=0?'+':''}${x.pct}%</span>
+        <div>
+          <div style="font-weight:700;font-size:.88rem">${x.lbl}</div>
+          <div style="font-size:.78rem;color:var(--muted)">${x.norm.toFixed(1)}/20</div>
+        </div>
+      </div>`).join('');
+  }
+
+  const wkDiv = document.getElementById('stu-weaknesses');
+  if(weak.length===0){
+    wkDiv.innerHTML='<p style="color:var(--muted);font-size:.87rem">Toutes les matières sont dans la zone acceptable !</p>';
+  } else {
+    wkDiv.innerHTML = weak.map(x=>`
+      <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem;padding:.6rem .8rem;background:#fef2f2;border-radius:8px;">
+        <span class="tag ${tagClass(x.pct)}">${x.pct}%</span>
+        <div>
+          <div style="font-weight:700;font-size:.88rem">${x.lbl}</div>
+          <div style="font-size:.78rem;color:var(--muted)">${x.norm.toFixed(1)}/20 — besoin d'effort ${x.pct<-50?'urgent':'important'}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // Percentile progress bars
+  const pctBars = document.getElementById('stu-pct-bars');
+  pctBars.innerHTML = '';
+  LABELS.forEach((lbl,i)=>{
+    const v=s.norm[i];
+    const fillColor = v>=14?'#16a34a':v>=10?'#d97706':'#dc2626';
+    pctBars.innerHTML+=`
+      <div class="pct-bar-row">
+        <span class="pct-bar-label">${lbl}</span>
+        <div class="pct-bar-track">
+          <div class="pct-bar-fill" style="width:${(v/20*100).toFixed(1)}%;background:${fillColor}"></div>
+        </div>
+        <span class="pct-bar-val" style="color:${fillColor}">${v.toFixed(1)}/20</span>
+      </div>`;
+  });
+}
+
+/* ════════════════════════════════════════════════════
+   TAB 6 — RECOMMENDATIONS
+════════════════════════════════════════════════════ */
+const RECS = [
+  {p:'CRITIQUE',cls:'rc-crit',subj:'🔴 Problème',sc:'6,55/20 — Écart −65,4% vs Top 20',
+   txt:'Priorité absolue. Séances quotidiennes de résolution de problèmes. Commencer par des problèmes simples (1 opération) et augmenter progressivement. Utiliser des schémas et diagrammes. Former les enseignants à la méthodologie : analyser → chercher → exécuter → vérifier.'},
+  {p:'CRITIQUE',cls:'rc-crit',subj:'🔴 Opération',sc:'11,20/20 — Écart −42,1% vs Top 20',
+   txt:'Calcul mental 10 min/jour obligatoire. Tables de multiplication, divisions, fractions à maîtriser. Concours de calcul rapide pour motiver. Suivi individuel des élèves les plus en difficulté.'},
+  {p:'IMPORTANT',cls:'rc-high',subj:'🟠 Géographie',sc:'11,61/20 — Écart −36,9% vs Top 20',
+   txt:'Cartes murales et supports visuels. Quiz hebdomadaires géographiques. Relier à l\'actualité et à Madagascar. Fiches mémo par région.'},
+  {p:'IMPORTANT',cls:'rc-high',subj:'🟠 TTFM',sc:'11,29/20 — Écart −34,9% vs Top 20',
+   txt:'Renforcer les travaux pratiques et manuels. Projets concrets et ateliers. Évaluations formatives régulières calquées sur l\'examen officiel.'},
+  {p:'MOYEN',cls:'rc-med',subj:'🟡 Malagasy',sc:'10,18/20 — Écart −30,5% vs Top 20',
+   txt:'Dictées et grammaire malagasy régulières. Exposés oraux pour améliorer l\'expression. Lecture de textes malagasy variés. Difficulté partagée — effort modéré suffira.'},
+  {p:'MOYEN',cls:'rc-med',subj:'🟡 SVT',sc:'12,55/20 — Écart −29,9% vs Top 20',
+   txt:'Expériences simples, observations naturalistes. Sorties pédagogiques locales. Schémas et fiches synthétiques par thème. Proche de la moyenne des bonnes écoles.'},
+  {p:'À MAINTENIR',cls:'rc-ok',subj:'🟢 Français',sc:'14,03/20 — Écart −22,1% vs Top 20',
+   txt:'Point fort — maintenir le niveau. Augmenter lecture et expression écrite. Participer à des concours de rédaction. Utiliser le Français comme levier de compréhension.'}
+];
+const rg=document.getElementById('rec-grid');
+RECS.forEach(r=>{
+  rg.innerHTML+=`<div class="rec-card ${r.cls}"><div class="rec-prio">${r.p}</div><div class="rec-subj">${r.subj}</div><div class="rec-score">${r.sc}</div><div class="rec-text">${r.txt}</div></div>`;
+});
+</script>
+</body>
+</html>

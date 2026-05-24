@@ -1,0 +1,7 @@
+# Dossiers exclus du dépôt
+agent/
+archive/
+docs/
+
+# Dépendances Node
+node_modules/
