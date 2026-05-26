@@ -511,7 +511,7 @@
     <!-- Download button -->
     <div class="btn-download-row">
       <button class="btn-download" id="btn-download" onclick="downloadStudentPng()">
-        ⬇ Télécharger le bilan (PNG)
+        ⬇ Télécharger le bilan
       </button>
     </div>
 
@@ -1180,7 +1180,7 @@ async function downloadStudentPng() {
   } catch(err) {
     alert(err.message);
     btn.disabled = false;
-    btn.innerHTML = '⬇ Télécharger le bilan (PNG)';
+    btn.innerHTML = '⬇ Télécharger le bilan';
     return;
   }
   btn.textContent = '⏳ Génération…';
@@ -1274,7 +1274,7 @@ async function downloadStudentPng() {
   } finally {
     card.style.display = 'none';
     btn.disabled = false;
-    btn.innerHTML = '⬇ Télécharger le bilan (PNG)';
+    btn.innerHTML = '⬇ Télécharger le bilan';
   }
 }
 
