@@ -1247,7 +1247,7 @@ async function downloadStudentPng() {
 
   try {
     const canvas = await html2canvas(card, {
-      scale: 2,
+      scale: 1.5,
       useCORS: true,
       backgroundColor: '#f8fafc',
       logging: false,
@@ -1262,11 +1262,11 @@ async function downloadStudentPng() {
       .normalize('NFD').replace(/[̀-ͯ]/g,'')
       .replace(/[^a-zA-Z0-9 _-]/g,'')
       .trim().replace(/\s+/g,'_')
-      + '.png';
+      + '.jpg';
 
     const link = document.createElement('a');
     link.download = filename;
-    link.href = canvas.toDataURL('image/png');
+    link.href = canvas.toDataURL('image/jpeg', 0.88);
     link.click();
   } catch(err) {
     alert('Erreur lors de la génération de l\'image : ' + err.message);
