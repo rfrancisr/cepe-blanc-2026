@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Analyse CEPE Blanc 2026 — Collège Privé Henitsoa</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
   :root {
     --hen:     #dc2626;   /* Rouge Henitsoa  */
@@ -142,6 +143,49 @@
   .rank-circle .num{font-size:2rem;font-weight:900;color:#fbbf24;line-height:1;}
   .rank-circle .lbl{font-size:.62rem;opacity:.8;text-transform:uppercase;letter-spacing:.5px;}
   @media(max-width:600px){.intro-panel{grid-template-columns:1fr;text-align:center;}.rank-circle{margin:0 auto;}}
+
+  /* ─── DOWNLOAD BUTTON ─── */
+  .btn-download{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.3rem;background:var(--hen);color:white;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;font-family:inherit;}
+  .btn-download:hover{background:#b91c1c;transform:translateY(-1px);}
+  .btn-download:disabled{background:#94a3b8;cursor:not-allowed;transform:none;}
+  .btn-download-row{display:flex;justify-content:flex-end;margin-bottom:1.2rem;}
+
+  /* ─── EXPORT CARD (off-screen, captured by html2canvas) ─── */
+  #export-card{position:absolute;top:0;left:-9999px;width:800px;background:#f8fafc;font-family:'Segoe UI',system-ui,sans-serif;display:none;padding:0;}
+  .ec-wrap{background:white;margin:20px;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.12);}
+  .ec-header{background:linear-gradient(135deg,#7f1d1d 0%,#991b1b 50%,#b91c1c 100%);color:white;padding:1.4rem 1.6rem;display:flex;justify-content:space-between;align-items:center;}
+  .ec-header-left .ec-school{font-size:1.1rem;font-weight:800;letter-spacing:.3px;}
+  .ec-header-left .ec-exam{font-size:.8rem;opacity:.8;margin-top:.2rem;}
+  .ec-header-right{text-align:right;font-size:.75rem;opacity:.7;}
+  .ec-student{padding:1.2rem 1.6rem;border-bottom:2px solid #f1f5f9;display:grid;grid-template-columns:auto 1fr auto;gap:1.2rem;align-items:center;}
+  .ec-av{width:52px;height:52px;border-radius:50%;background:#fee2e2;border:3px solid #dc2626;display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
+  .ec-sname{font-size:1.05rem;font-weight:800;color:#1a3a5c;}
+  .ec-smeta{font-size:.78rem;color:#64748b;margin-top:.25rem;}
+  .ec-moy-box{text-align:center;background:#fee2e2;border:2px solid #dc2626;border-radius:10px;padding:.6rem 1rem;}
+  .ec-moy-val{font-size:1.7rem;font-weight:900;color:#dc2626;line-height:1;}
+  .ec-moy-lbl{font-size:.65rem;color:#991b1b;text-transform:uppercase;letter-spacing:.5px;}
+  .ec-sw{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:2px solid #f1f5f9;}
+  .ec-sw-col{padding:1rem 1.4rem;}
+  .ec-sw-col:first-child{border-right:1px solid #f1f5f9;}
+  .ec-sw-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.7rem;padding-bottom:.4rem;border-bottom:2px solid;}
+  .ec-sw-title.ec-ok{color:#15803d;border-color:#bbf7d0;}
+  .ec-sw-title.ec-bad{color:#b91c1c;border-color:#fecaca;}
+  .ec-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;padding:.35rem .6rem;border-radius:6px;font-size:.82rem;}
+  .ec-row.ok{background:#f0fdf4;}
+  .ec-row.bad{background:#fef2f2;}
+  .ec-badge{padding:.1rem .4rem;border-radius:4px;font-size:.72rem;font-weight:800;min-width:44px;text-align:center;}
+  .ec-badge.ok{background:#dcfce7;color:#15803d;}
+  .ec-badge.bad{background:#fee2e2;color:#b91c1c;}
+  .ec-rname{font-weight:700;color:#1e293b;flex:1;}
+  .ec-rscore{font-size:.77rem;color:#64748b;}
+  .ec-tbl-section{padding:1rem 1.6rem 1.4rem;}
+  .ec-tbl-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#1a3a5c;margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:2px solid #e2e8f0;}
+  .ec-table{width:100%;border-collapse:collapse;font-size:.78rem;}
+  .ec-table th{background:#f1f5f9;color:#475569;font-weight:700;padding:.45rem .6rem;text-align:left;border-bottom:2px solid #e2e8f0;font-size:.72rem;text-transform:uppercase;}
+  .ec-table td{padding:.42rem .6rem;border-bottom:1px solid #f1f5f9;color:#1e293b;}
+  .ec-table tr:last-child td{border-bottom:none;}
+  .ec-table tr:hover td{background:#f8fafc;}
+  .ec-footer{background:#f8fafc;padding:.7rem 1.6rem;font-size:.7rem;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;}
 
   /* ─── STUDENT TAB ─── */
   .student-selector{background:var(--card);border-radius:14px;padding:1.4rem;margin-bottom:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.07);}
@@ -442,6 +486,13 @@
         <div class="sc-moy-val" id="stu-moy">—</div>
         <div class="sc-moy-lbl">Moyenne /20</div>
       </div>
+    </div>
+
+    <!-- Download button -->
+    <div class="btn-download-row">
+      <button class="btn-download" id="btn-download" onclick="downloadStudentPng()">
+        ⬇ Télécharger le bilan (PNG)
+      </button>
     </div>
 
     <!-- Charts -->
@@ -1078,6 +1129,108 @@ function loadStudent(idx) {
 }
 
 /* ════════════════════════════════════════════════════
+   DOWNLOAD PNG — student summary card
+════════════════════════════════════════════════════ */
+async function downloadStudentPng() {
+  if (currentStudentIdx === null) return;
+  const btn = document.getElementById('btn-download');
+  btn.disabled = true;
+  btn.textContent = '⏳ Génération…';
+
+  const s   = STUDENTS.students[currentStudentIdx];
+  const t20 = STUDENTS.top20Norm;
+
+  // ── Populate export card ──────────────────────────
+  document.getElementById('ec-avatar').textContent = s.sexe==='F' ? '👩' : '👨';
+  document.getElementById('ec-name').textContent   = s.nom;
+  document.getElementById('ec-meta').textContent   =
+    `${s.sexe==='F'?'Fille':'Garçon'} · Rang général #${s.rang} sur 1 332 élèves · Collège Privé Henitsoa`;
+  document.getElementById('ec-moy').textContent    = s.moyenne.toFixed(2);
+
+  // Points forts / Lacunes
+  const sorted  = LABELS.map((lbl,i)=>({lbl,pct:s.pcts[i],norm:s.norm[i]})).sort((a,b)=>b.pct-a.pct);
+  const strong  = sorted.filter(x=>x.pct>=-22);
+  const weak    = sorted.filter(x=>x.pct<-22);
+
+  const mkRow = (x, cls) => `
+    <div class="ec-row ${cls}">
+      <span class="ec-badge ${cls}">${x.pct>=0?'+':''}${x.pct}%</span>
+      <span class="ec-rname">${x.lbl}</span>
+      <span class="ec-rscore">${x.norm.toFixed(1)}/20</span>
+    </div>`;
+
+  document.getElementById('ec-strengths').innerHTML = strong.length
+    ? strong.map(x=>mkRow(x,'ok')).join('')
+    : '<div style="font-size:.8rem;color:#64748b;font-style:italic;padding:.3rem 0">Aucune matière au-dessus du seuil</div>';
+
+  document.getElementById('ec-weaknesses').innerHTML = weak.length
+    ? weak.map(x=>mkRow(x,'bad')).join('')
+    : '<div style="font-size:.8rem;color:#64748b;font-style:italic;padding:.3rem 0">Toutes les matières dans la zone acceptable !</div>';
+
+  // Detailed table
+  const tbody = document.getElementById('ec-tbody');
+  tbody.innerHTML = '';
+  LABELS.forEach((lbl,i)=>{
+    const raw=s.raw[i], norm=s.norm[i], ref=t20[i];
+    const gap=(norm-ref).toFixed(2), pct=s.pcts[i];
+    let diag, dc;
+    if(pct>=0)       { diag='Au niveau';   dc='#16a34a'; }
+    else if(pct>=-22){ diag='Proche';      dc='#a16207'; }
+    else if(pct>=-40){ diag='A travailler';dc='#c2410c'; }
+    else             { diag='Critique';    dc='#b91c1c'; }
+    tbody.innerHTML+=`<tr>
+      <td><strong>${lbl}</strong></td>
+      <td style="color:#64748b">/${BAREME[i]}</td>
+      <td style="font-weight:700">${raw}</td>
+      <td style="color:${scoreColor(norm)};font-weight:700">${norm.toFixed(1)}</td>
+      <td style="color:#0284c7;font-weight:700">${ref.toFixed(2)}</td>
+      <td style="color:${pct<-30?'#b91c1c':'#a16207'};font-weight:700">${gap}</td>
+      <td style="color:${pct<-30?'#b91c1c':'#a16207'};font-weight:700">${pct>=0?'+':''}${pct}%</td>
+      <td style="color:${dc};font-weight:600">${diag}</td>
+    </tr>`;
+  });
+
+  // ── Capture & download ────────────────────────────
+  const card = document.getElementById('export-card');
+  card.style.display = 'block';
+
+  // Small pause for browser to lay out the card
+  await new Promise(r => setTimeout(r, 80));
+
+  try {
+    const canvas = await html2canvas(card, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#f8fafc',
+      logging: false,
+      x: 0,
+      y: 0,
+      scrollX: 0,
+      scrollY: 0
+    });
+
+    // Sanitize filename: remove accents, keep alphanumeric + spaces
+    const filename = s.nom
+      .normalize('NFD').replace(/[̀-ͯ]/g,'')
+      .replace(/[^a-zA-Z0-9 _-]/g,'')
+      .trim().replace(/\s+/g,'_')
+      + '.png';
+
+    const link = document.createElement('a');
+    link.download = filename;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch(err) {
+    alert('Erreur lors de la génération de l\'image : ' + err.message);
+    console.error(err);
+  } finally {
+    card.style.display = 'none';
+    btn.disabled = false;
+    btn.innerHTML = '⬇ Télécharger le bilan (PNG)';
+  }
+}
+
+/* ════════════════════════════════════════════════════
    TAB 6 — RECOMMENDATIONS
 ════════════════════════════════════════════════════ */
 const RECS = [
@@ -1101,5 +1254,57 @@ RECS.forEach(r=>{
   rg.innerHTML+=`<div class="rec-card ${r.cls}"><div class="rec-prio">${r.p}</div><div class="rec-subj">${r.subj}</div><div class="rec-score">${r.sc}</div><div class="rec-text">${r.txt}</div></div>`;
 });
 </script>
+
+<!-- ═══════════════════════════════════════════════════
+     EXPORT CARD — hidden, captured by html2canvas
+═══════════════════════════════════════════════════ -->
+<div id="export-card">
+  <div class="ec-wrap">
+    <!-- Header -->
+    <div class="ec-header">
+      <div class="ec-header-left">
+        <div class="ec-school">Collège Privé Henitsoa</div>
+        <div class="ec-exam">Analyse CEPE Blanc 2026</div>
+      </div>
+      <div class="ec-header-right">Bilan individuel<br>Résultats &amp; Recommandations</div>
+    </div>
+    <!-- Student identity -->
+    <div class="ec-student">
+      <div class="ec-av" id="ec-avatar">👤</div>
+      <div>
+        <div class="ec-sname" id="ec-name">—</div>
+        <div class="ec-smeta" id="ec-meta">—</div>
+      </div>
+      <div class="ec-moy-box">
+        <div class="ec-moy-val" id="ec-moy">—</div>
+        <div class="ec-moy-lbl">Moyenne /20</div>
+      </div>
+    </div>
+    <!-- Points forts / Lacunes -->
+    <div class="ec-sw">
+      <div class="ec-sw-col">
+        <div class="ec-sw-title ec-ok">Points forts</div>
+        <div id="ec-strengths"></div>
+      </div>
+      <div class="ec-sw-col">
+        <div class="ec-sw-title ec-bad">Lacunes à combler</div>
+        <div id="ec-weaknesses"></div>
+      </div>
+    </div>
+    <!-- Detailed table -->
+    <div class="ec-tbl-section">
+      <div class="ec-tbl-title">Tableau d'analyse détaillé</div>
+      <table class="ec-table">
+        <thead><tr>
+          <th>Matière</th><th>Barème</th><th>Score brut</th>
+          <th>Score /20</th><th>Top 20 /20</th><th>Écart</th><th>Gap %</th><th>Diagnostic</th>
+        </tr></thead>
+        <tbody id="ec-tbody"></tbody>
+      </table>
+    </div>
+    <!-- Footer -->
+    <div class="ec-footer">Généré depuis rfrancisr.github.io/cepe-blanc-2026 · CEPE Blanc 2026 · Collège Privé Henitsoa</div>
+  </div>
+</div>
 </body>
 </html>
