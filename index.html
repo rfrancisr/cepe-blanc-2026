@@ -168,7 +168,10 @@
   .btn-download{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.3rem;background:var(--hen);color:white;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;font-family:inherit;}
   .btn-download:hover{background:#b91c1c;transform:translateY(-1px);}
   .btn-download:disabled{background:#94a3b8;cursor:not-allowed;transform:none;}
-  .btn-download-row{display:flex;justify-content:flex-end;margin-bottom:1.2rem;}
+  .btn-download-all{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.3rem;background:white;color:var(--hen);border:2px solid var(--hen);border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;transition:background .2s,transform .15s;font-family:inherit;}
+  .btn-download-all:hover{background:#fee2e2;transform:translateY(-1px);}
+  .btn-download-all:disabled{border-color:#94a3b8;color:#94a3b8;cursor:not-allowed;transform:none;}
+  .btn-download-row{display:flex;justify-content:flex-end;gap:.75rem;margin-bottom:1.2rem;}
 
   /* ─── EXPORT CARD (off-screen, captured by html2canvas) ─── */
   #export-card{position:absolute;top:0;left:-9999px;width:800px;background:#f8fafc;font-family:'Segoe UI',system-ui,sans-serif;display:none;padding:0;}
@@ -462,6 +465,13 @@
   <div class="section-title">Analyse individuelle</div>
   <div class="section-subtitle">Sélectionnez un élève Henitsoa pour voir son profil complet comparé aux Top 20</div>
 
+  <!-- Download all — always visible, independent of student selection -->
+  <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
+    <button class="btn-download-all" id="btn-download-all" onclick="downloadAllStudentsPdf()">
+      📄 Bilans PDF — tous les élèves
+    </button>
+  </div>
+
   <div class="tab-intro">
     <p><strong>Du général au particulier pour chaque élève.</strong> Le profil s'affiche en quatre niveaux : <strong>(1)</strong> carte synthétique (rang, moyenne), <strong>(2)</strong> radar et graphique à barres (vue globale des compétences), <strong>(3)</strong> barres de progression et tableau chiffré (matière par matière), <strong>(4)</strong> diagnostic personnalisé points forts / lacunes à combler.</p>
   </div>
@@ -508,7 +518,7 @@
       </div>
     </div>
 
-    <!-- Download button -->
+    <!-- Download individual -->
     <div class="btn-download-row">
       <button class="btn-download" id="btn-download" onclick="downloadStudentPng()">
         ⬇ Télécharger le bilan
@@ -1275,6 +1285,202 @@ async function downloadStudentPng() {
     card.style.display = 'none';
     btn.disabled = false;
     btn.innerHTML = '⬇ Télécharger le bilan';
+  }
+}
+
+/* ════════════════════════════════════════════════════
+   DOWNLOAD ALL STUDENTS — printable PDF, 4 per A4 page
+   Uses a new window + browser print dialog (no extra lib)
+════════════════════════════════════════════════════ */
+function downloadAllStudentsPdf() {
+  const btn = document.getElementById('btn-download-all');
+  btn.disabled = true;
+  btn.textContent = '⏳ Génération…';
+
+  try {
+    const students = STUDENTS.students;
+    const top20    = STUDENTS.top20Norm;
+
+    // ── Diagnostic label + color ─────────────────────
+    function diagLabel(pct) {
+      if (pct >=   0) return { text: 'Au niveau',   c: '#16a34a' };
+      if (pct >= -22) return { text: 'Proche',       c: '#a16207' };
+      if (pct >= -40) return { text: 'À travailler', c: '#c2410c' };
+                      return { text: 'Critique',     c: '#b91c1c' };
+    }
+
+    // ── Build one compact card ───────────────────────
+    function buildCard(s) {
+      const sorted = LABELS.map((lbl,i) => ({ lbl, pct: s.pcts[i], norm: s.norm[i] }))
+                           .sort((a,b) => b.pct - a.pct);
+      const strong = sorted.filter(x => x.pct >= -22);
+      const weak   = sorted.filter(x => x.pct  < -22);
+
+      const mkSW = (x, cls) =>
+        `<div class="sw-row">` +
+          `<span class="sw-badge ${cls}">${x.pct>=0?'+':''}${x.pct}%</span>` +
+          `<span class="sw-name">${x.lbl}</span>` +
+          `<span class="sw-score">${x.norm.toFixed(1)}/20</span>` +
+        `</div>`;
+
+      const trows = LABELS.map((lbl,i) => {
+        const raw=s.raw[i], norm=s.norm[i], ref=top20[i];
+        const gap=(norm-ref).toFixed(1), pct=s.pcts[i];
+        const d  = diagLabel(pct);
+        const sc = norm>=14 ? '#16a34a' : norm>=10 ? '#d97706' : '#dc2626';
+        const gc = pct<-30  ? '#b91c1c' : '#a16207';
+        return `<tr>` +
+          `<td><b>${lbl}</b></td>` +
+          `<td style="color:#64748b">/${BAREME[i]}</td>` +
+          `<td style="font-weight:700">${raw}</td>` +
+          `<td style="color:${sc};font-weight:700">${norm.toFixed(1)}</td>` +
+          `<td style="color:#0284c7">${ref.toFixed(1)}</td>` +
+          `<td style="color:${gc}">${gap}</td>` +
+          `<td style="color:${gc}">${pct>=0?'+':''}${pct}%</td>` +
+          `<td style="color:${d.c};font-weight:600">${d.text}</td>` +
+        `</tr>`;
+      }).join('');
+
+      return (
+        `<div class="card">` +
+          // Header
+          `<div class="ch">` +
+            `<span class="ch-school">Coll&egrave;ge Priv&eacute; Henitsoa &mdash; CEPE Blanc 2026</span>` +
+            `<span class="ch-type">Bilan individuel</span>` +
+          `</div>` +
+          // Student identity
+          `<div class="cs">` +
+            `<span class="cs-av">${s.sexe==='F'?'👩':'👨'}</span>` +
+            `<div class="cs-info">` +
+              `<div class="cs-name">${s.nom}</div>` +
+              `<div class="cs-meta">${s.sexe==='F'?'Fille':'Gar&ccedil;on'} &bull; Rang #${s.rang}&thinsp;/&thinsp;1&thinsp;332</div>` +
+            `</div>` +
+            `<div class="cs-moy">` +
+              `<div class="cs-mv">${s.moyenne.toFixed(2)}</div>` +
+              `<div class="cs-ml">Moy./20</div>` +
+            `</div>` +
+          `</div>` +
+          // Strengths / Weaknesses
+          `<div class="csw">` +
+            `<div class="sw-col">` +
+              `<div class="sw-t ok-t">&#10003; Points forts</div>` +
+              (strong.length ? strong.map(x=>mkSW(x,'ok')).join('') : `<div class="sw-e">Aucune</div>`) +
+            `</div>` +
+            `<div class="sw-col">` +
+              `<div class="sw-t bad-t">&#10007; Lacunes</div>` +
+              (weak.length ? weak.map(x=>mkSW(x,'bad')).join('') : `<div class="sw-e">Toutes au niveau</div>`) +
+            `</div>` +
+          `</div>` +
+          // Detail table
+          `<div class="ctbl">` +
+            `<table>` +
+              `<thead><tr>` +
+                `<th>Mati&egrave;re</th><th>Bar.</th><th>Brut</th>` +
+                `<th>/20</th><th>Top20</th><th>&Eacute;c.</th><th>Gap%</th><th>Diagnostic</th>` +
+              `</tr></thead>` +
+              `<tbody>${trows}</tbody>` +
+            `</table>` +
+          `</div>` +
+        `</div>`
+      );
+    }
+
+    // ── Group students 4 per page ────────────────────
+    let pages = '';
+    for (let i = 0; i < students.length; i += 4) {
+      pages += `<div class="page">${students.slice(i, i+4).map(buildCard).join('')}</div>\n`;
+    }
+
+    // ── Full printable HTML document ─────────────────
+    const html = `<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8">
+<title>Bilans CEPE Blanc 2026 — Collège Privé Henitsoa</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#e5e7eb;}
+@page{size:A4 portrait;margin:8mm;}
+
+/* ─── Page : 2×2 grid ─── */
+.page{
+  width:194mm;height:281mm;
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  gap:4mm;
+  break-after:page;page-break-after:always;
+}
+.page:last-child{break-after:auto;page-break-after:auto;}
+
+/* ─── Card shell ─── */
+.card{border:1.5px solid #cbd5e1;border-radius:3mm;overflow:hidden;
+      display:flex;flex-direction:column;font-size:7pt;background:white;}
+
+/* ─── Card header ─── */
+.ch{background:linear-gradient(135deg,#7f1d1d,#b91c1c);color:white;
+    padding:2mm 3mm;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.ch-school{font-size:6.5pt;font-weight:800;}
+.ch-type{font-size:5.5pt;opacity:.75;}
+
+/* ─── Student identity ─── */
+.cs{padding:2mm 3mm;display:flex;align-items:center;gap:2mm;
+    border-bottom:1px solid #f1f5f9;flex-shrink:0;}
+.cs-av{font-size:16pt;line-height:1;}
+.cs-info{flex:1;}
+.cs-name{font-size:8.5pt;font-weight:800;color:#1a3a5c;}
+.cs-meta{font-size:5.5pt;color:#64748b;margin-top:.5mm;}
+.cs-moy{text-align:center;background:#fee2e2;border:1.5px solid #dc2626;
+        border-radius:2mm;padding:1mm 2.5mm;flex-shrink:0;}
+.cs-mv{font-size:11pt;font-weight:900;color:#dc2626;line-height:1.1;}
+.cs-ml{font-size:5pt;color:#991b1b;text-transform:uppercase;letter-spacing:.3px;}
+
+/* ─── Strengths / Weaknesses ─── */
+.csw{display:grid;grid-template-columns:1fr 1fr;
+     border-bottom:1px solid #f1f5f9;flex-shrink:0;}
+.sw-col{padding:1.5mm 2.5mm;}
+.sw-col:first-child{border-right:1px solid #f1f5f9;}
+.sw-t{font-size:5.5pt;font-weight:800;text-transform:uppercase;letter-spacing:.3px;
+      margin-bottom:1mm;padding-bottom:.5mm;border-bottom:1.5px solid;}
+.ok-t{color:#15803d;border-color:#bbf7d0;}
+.bad-t{color:#b91c1c;border-color:#fecaca;}
+.sw-row{display:flex;align-items:center;gap:1mm;margin-bottom:.7mm;font-size:6.5pt;}
+.sw-badge{padding:0 1mm;border-radius:1mm;font-size:5.5pt;font-weight:800;
+          min-width:7.5mm;text-align:center;}
+.sw-badge.ok{background:#dcfce7;color:#15803d;}
+.sw-badge.bad{background:#fee2e2;color:#b91c1c;}
+.sw-name{flex:1;color:#1e293b;font-weight:600;}
+.sw-score{color:#64748b;font-size:5.5pt;white-space:nowrap;}
+.sw-e{font-size:5.5pt;color:#94a3b8;font-style:italic;}
+
+/* ─── Detail table ─── */
+.ctbl{padding:1.5mm 2.5mm 2mm;flex:1;}
+table{width:100%;border-collapse:collapse;font-size:6.5pt;}
+th{background:#f1f5f9;color:#475569;font-weight:700;padding:.8mm 1mm;
+   text-align:left;border-bottom:1.5px solid #e2e8f0;font-size:6pt;white-space:nowrap;}
+td{padding:.65mm 1mm;border-bottom:1px solid #f8fafc;color:#1e293b;white-space:nowrap;}
+tr:last-child td{border-bottom:none;}
+
+@media screen{
+  .page{margin:8mm auto;padding:8mm;background:white;
+        box-shadow:0 4px 16px rgba(0,0,0,.18);}
+}
+</style>
+</head>
+<body>
+${pages}<script>window.addEventListener('load',function(){setTimeout(function(){window.print();},400);});<\/script>
+</body></html>`;
+
+    const win = window.open('', '_blank', 'width=980,height=780');
+    if (!win) {
+      alert("Le navigateur a bloqué l’ouverture de la fenêtre.\nVeuillez autoriser les popups pour ce site, puis réessayez.");
+      return;
+    }
+    win.document.write(html);
+    win.document.close();
+
+  } catch(err) {
+    alert('Erreur lors de la génération : ' + err.message);
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '📄 Bilans PDF — tous les élèves';
   }
 }
 
